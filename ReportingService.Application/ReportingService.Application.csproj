@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ReportingService.Core\ReportingService.Core.csproj" />
+    <ProjectReference Include="..\ReportingService.Persistence\ReportingService.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ReportingService.Application\ReportingService.Application.csproj" />
+    <ProjectReference Include="..\ReportingService.Core\ReportingService.Core.csproj" />
+  </ItemGroup>
+
 </Project>
