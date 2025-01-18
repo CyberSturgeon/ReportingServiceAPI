@@ -11,4 +11,6 @@ public class Transaction
     public DateTime Date { get; set; }
     public decimal AmountRUB { get; set; }
     public TransactionType TransactionType { get; set; }
+    //DENORMALIZED
+    public Account Account { get; set; }
 }
