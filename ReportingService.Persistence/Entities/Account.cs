@@ -10,5 +10,7 @@ public class Account
     public DateTime DateCreated { get; set; }
     public bool Status { get; set; }
     public Currency Currency { get; set; }
-    public ICollection<Transaction> Transactions { get; set; }
+    public ICollection<Transaction> Transactions { get; set; } = [];
+    //DENORMALIZED
+    public Customer Customer { get; set; }
 }
