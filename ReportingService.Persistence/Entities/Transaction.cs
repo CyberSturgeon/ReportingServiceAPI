@@ -1,4 +1,6 @@
 ﻿
+using ReportingService.Core.Configuration;
+
 namespace ReportingService.Persistence.Entities;
 
 public class Transaction
@@ -7,5 +9,6 @@ public class Transaction
     public Guid AccountId { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
-    //public TransactionType TransactionType { get; set; }
+    public decimal AmountRUB { get; set; }
+    public TransactionType TransactionType { get; set; }
 }

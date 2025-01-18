@@ -13,7 +13,6 @@ public class Customer
     public DateTime BirthDate { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string Description { get; set; }
-    public IEnumerable<Account> Accounts { get; set; }
-    public bool IsBanned { get; set; }
+    public ICollection<Account> Accounts { get; set; }
+    public bool IsDeactivated { get; set; }
 }

@@ -3,7 +3,8 @@ namespace ReportingService.Persistence.Configuration;
 
 public enum Role
 {
-    Regular,
-    Vip,
+    Unknown,
     Admin,
+    Regular,
+    VIP
 }
