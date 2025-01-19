@@ -4,7 +4,7 @@ using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Persistence.Configuration;
 
-internal class CustomerEntityConfiguration : IEntityTypeConfiguration<Customer>
+public class CustomerEntityConfiguration : IEntityTypeConfiguration<Customer>
 {
     public void Configure(EntityTypeBuilder<Customer> builder)
     {
