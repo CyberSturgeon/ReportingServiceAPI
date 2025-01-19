@@ -12,5 +12,6 @@ public class Transaction
     public decimal AmountRUB { get; set; }
     public TransactionType TransactionType { get; set; }
     //DENORMALIZED
+    public Currency Currency { get; set; }
     public Account Account { get; set; }
 }
