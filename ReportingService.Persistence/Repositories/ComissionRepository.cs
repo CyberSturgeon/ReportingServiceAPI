@@ -3,7 +3,7 @@ using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Persistence.Repositories;
 
-public class ComissionRepository(ReportingContext context)
+public class ComissionRepository(ReportingContext context) : IComissionRepository
 {
     public async Task<Comission?> GetByIdAsync(Guid id) => context.Comissions
            .FirstOrDefault(x => x.Id == id);
@@ -16,7 +16,7 @@ public class ComissionRepository(ReportingContext context)
         context.Comissions.ToList();
 
     public async Task<ICollection<Comission>?> GetAllScopedAsync(DateTime DateStart, DateTime DateEnd) =>
-        context.Comissions.Where(x => x.Date>DateStart && x.Date<DateEnd).ToList();
+        context.Comissions.Where(x => x.Date > DateStart && x.Date < DateEnd).ToList();
 
     public async Task<Guid> AddAsync(Comission comission)
     {
