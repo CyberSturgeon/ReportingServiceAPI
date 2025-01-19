@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
+using ReportingService.Core.Configuration;
 
 namespace ReportingService.Persistence.Repositories;
 
@@ -66,5 +67,34 @@ public class CustomerRepository(ReportingContext context) : ICustomerRepository
         await context.SaveChangesAsync();
 
         return customer.Id;
+    }
+
+    public async Task<ICollection<Customer>> GetByBirthdayAsync(DateTime day) => context.Customers
+        .Where(x => x.BirthDate == day).ToList();
+
+    public async Task<ICollection<Customer>> GetByTransactionInPeriodCountAsync(
+        int transactionsCount, DateTime DateStart, DateTime DateEnd) => context.Customers
+            .Where(x => x.Transactions
+                .Where(y => y.TransactionType != TransactionType.Withdrawal &&
+                y.Date > DateStart &&
+                y.Date < DateEnd)
+            .ToList().Count>=transactionsCount).ToList();
+    
+    public async Task<ICollection<Customer>> GetByAccountDepositeDifferenceInPeriodAsync(
+        decimal depDifference, DateTime DateStart, DateTime DateEnd) => context.Customers
+            .Where(x => x.AmountWithoutDrawalRUB - x.AmountWithDrawalRUB > depDifference).ToList();
+
+    public async Task UpdateAmountWithoutDrawalRUBAsync(Customer customer, decimal newAmount)
+    {
+        customer.AmountWithoutDrawalRUB = newAmount;
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task UpdateAmountWithDrawalRUBAsync(Customer customer, decimal newAmount)
+    {
+        customer.AmountWithDrawalRUB = newAmount;
+
+        await context.SaveChangesAsync();
     }
 }

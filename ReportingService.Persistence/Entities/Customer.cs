@@ -17,5 +17,6 @@ public class Customer
     public bool IsDeactivated { get; set; }
     // DENORMALIZED
     public ICollection<Transaction> Transactions { get; set; } = [];
-    public decimal CurrencyRUB { get; set; }
+    public decimal AmountWithoutDrawalRUB { get; set; }
+    public decimal AmountWithDrawalRUB { get; set; }
 }
