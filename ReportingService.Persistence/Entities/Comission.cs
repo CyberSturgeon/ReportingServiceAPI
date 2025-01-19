@@ -8,4 +8,6 @@ public class Comission
     public Guid TransactionId { get; set; }
     public decimal Income { get; set; }
     public DateTime TransactionDate { get; set; }
+    //DENORMALIZED
+    public DateTime Date;
 }
