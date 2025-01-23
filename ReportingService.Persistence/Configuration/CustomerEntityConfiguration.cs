@@ -10,7 +10,7 @@ internal static class CustomerEntityConfiguration
     {
         builder.Entity<Customer>().HasMany(x => x.Accounts)
                 .WithOne(y => y.Customer)
-                .HasForeignKey(x => x.CustomerID);
+                .HasForeignKey(x => x.CustomerId);
 
         builder.Entity<Customer>().HasMany(x => x.Transactions);
 

@@ -13,6 +13,6 @@ public class Transaction
     public TransactionType TransactionType { get; set; }
     //DENORMALIZED
     public Currency Currency { get; set; }
-    public Guid CustomerID { get; set; }
+    public Guid CustomerId { get; set; }
 
 }

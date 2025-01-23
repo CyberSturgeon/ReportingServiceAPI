@@ -19,7 +19,7 @@ internal static class ComissionEntityConfiguration
         builder.Entity<Comission>().Property(x => x.Transaction)
             .IsRequired();
 
-        builder.Entity<Comission>().Property(x => x.TransactionID)
+        builder.Entity<Comission>().Property(x => x.TransactionId)
             .IsRequired();
 
         builder.Entity<Comission>().HasOne(x => x.Transaction);
