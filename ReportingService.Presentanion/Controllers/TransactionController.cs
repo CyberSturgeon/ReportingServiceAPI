@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReportingService.Persistence.Entities;
 using ReportingService.Presentanion.Models;
-
+//GET (monthCount transCount) => List<Guid> Ids
+//GET (monthCount money) => List<Guid> Ids
+// GET (day month) => List<Guid> Ids
+// 
 namespace ReportingService.Presentanion.Controllers;
+
+[Route("api/customers")]
 
 public class TransactionController : Controller
 {
