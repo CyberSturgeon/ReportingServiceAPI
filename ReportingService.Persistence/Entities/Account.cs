@@ -11,4 +11,5 @@ public class Account
     public bool Status { get; set; }
     public Currency Currency { get; set; }
     public ICollection<Transaction> Transactions { get; set; } = [];
+    public Customer Customer { get; set; }
 }

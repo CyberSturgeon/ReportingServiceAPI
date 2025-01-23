@@ -5,23 +5,25 @@ using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Persistence.Configuration;
 
-public class ComissionEntityConfiguration : IEntityTypeConfiguration<Comission>
+internal static class ComissionEntityConfiguration
 {
-    public void Configure(EntityTypeBuilder<Comission> builder)
+    internal static void Configure(this ModelBuilder builder)
     {
-        builder.Property(x => x.Id)
+        builder.Entity<Comission>().Property(x => x.Id)
             .IsRequired()
             .ValueGeneratedOnAdd();
 
-        builder.Property(x => x.Income)
+        builder.Entity<Comission>().Property(x => x.Income)
             .IsRequired();
 
-        builder.Property(x => x.Transaction)
+        builder.Entity<Comission>().Property(x => x.Transaction)
             .IsRequired();
 
-        builder.Property(x => x.TransactionId)
+        builder.Entity<Comission>().Property(x => x.TransactionID)
             .IsRequired();
 
-        builder.HasOne(x => x.Transaction);
+        builder.Entity<Comission>().HasOne(x => x.Transaction);
+
+        builder.Entity<Comission>().Property<decimal>(x => x.Income);
     }
 }

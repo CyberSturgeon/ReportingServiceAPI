@@ -4,41 +4,45 @@ using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Persistence.Configuration;
 
-public class CustomerEntityConfiguration : IEntityTypeConfiguration<Customer>
+internal static class CustomerEntityConfiguration
 {
-    public void Configure(EntityTypeBuilder<Customer> builder)
+    internal static void ConfigureCustomer(this ModelBuilder builder)
     {
-        builder.HasMany(x => x.Accounts).WithOne(x => x.Customer);
+        builder.Entity<Customer>().HasMany(x => x.Accounts)
+                .WithOne(y => y.Customer)
+                .HasForeignKey(x => x.CustomerID);
 
-        builder.HasMany(x => x.Transactions);
+        builder.Entity<Customer>().HasMany(x => x.Transactions);
 
-        builder.Property(x => x.Id)
+        builder.Entity<Customer>().Property(x => x.Id)
             .IsRequired()
             .ValueGeneratedOnAdd();
 
-        builder.HasIndex(x => x.Login)
+        builder.Entity<Customer>().HasIndex(x => x.Login)
         .IsUnique();
 
-        builder.Property(x => x.FirstName)
+        builder.Entity<Customer>().Property(x => x.FirstName)
         .IsRequired()
         .HasMaxLength(30);
 
-        builder.Property(x => x.LastName)
+        builder.Entity<Customer>().Property(x => x.LastName)
         .IsRequired()
         .HasMaxLength(30);
 
-        builder.Property(x => x.Login)
+        builder.Entity<Customer>().Property(x => x.Login)
         .IsRequired()
         .HasMaxLength(10);
 
-        builder.Property(x => x.Password)
+        builder.Entity<Customer>().Property(x => x.Password)
         .IsRequired()
         .HasMaxLength(150);
 
-        builder.Property(x => x.Role)
+        builder.Entity<Customer>().Property(x => x.Role)
         .IsRequired();
 
-        builder.Property(x => x.IsDeactivated)
+        builder.Entity<Customer>().Property(x => x.IsDeactivated)
         .IsRequired();
+
+        builder.Entity<Customer>().Property<DateTime>(x => x.BirthDate);
     }
 }

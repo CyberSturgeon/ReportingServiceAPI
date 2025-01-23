@@ -9,7 +9,10 @@
 
   <ItemGroup>
     <Folder Include="Configuration\" />
-    <Folder Include="Repositories\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>
