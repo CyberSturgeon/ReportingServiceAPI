@@ -15,7 +15,7 @@ internal static class AccountEntityConfiguration
         builder.Entity<Account>().Property(x => x.CustomerId)
        .IsRequired()
 
-        builder.Entity<Account>().Property<DateCreated>(x => x.CurrencyDate);
+        builder.Entity<Account>().Property<DateTime>(x => x.DateCreated);
 
         uilder.Entity<Account>().Property(x => x.Status)
         .IsRequired();
@@ -26,7 +26,7 @@ internal static class AccountEntityConfiguration
         builder.Entity<Account>().Property(x => x.Customer)
         .IsRequired();
 
-        builder.Entity<Customer>().HasMany(x => x.Transactions)
+        builder.Entity<Account>().HasMany(x => x.Transactions)
         
     }
 }
