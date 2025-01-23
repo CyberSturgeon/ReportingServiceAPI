@@ -13,11 +13,11 @@ internal static class TransactionEntityConfiguration
         .ValueGeneratedOnAdd();
 
         builder.Entity<Transaction>().Property(x => x.AccountId)
-       .IsRequired()
+       .IsRequired();
 
         builder.Entity<Transaction>().Property<decimal>(x => x.Amount);
 
-        builder.Entity<Account>().Property<DateTime>(x => x.Date);
+        builder.Entity<Transaction>().Property<DateTime>(x => x.Date);
 
         builder.Entity<Transaction>().Property<decimal>(x => x.AmountRUB);
 

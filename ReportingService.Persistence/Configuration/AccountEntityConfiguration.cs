@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Persistence.Configuration;
@@ -12,21 +11,20 @@ internal static class AccountEntityConfiguration
         .IsRequired()
         .ValueGeneratedOnAdd();
 
-        builder.Entity<Account>().Property(x => x.CustomerId)
-       .IsRequired()
-
         builder.Entity<Account>().Property<DateTime>(x => x.DateCreated);
 
-        uilder.Entity<Account>().Property(x => x.Status)
+        builder.Entity<Account>().Property(x => x.Status)
         .IsRequired();
 
-        builder.Entity<Account>().Property(x => x.Currensy)
-        .IsRequired();
+        builder.Entity<Account>().Property(x => x.Currency)
+        .IsRequired()
+        .HasMaxLength(7);
 
-        builder.Entity<Account>().Property(x => x.Customer)
-        .IsRequired();
+        builder.Entity<Account>().HasOne(x => x.Customer)
+        .WithMany(y => y.Accounts)
+        .HasForeignKey(x => x.CustomerId);
 
-        builder.Entity<Account>().HasMany(x => x.Transactions)
-        
+        builder.Entity<Account>().HasMany(x => x.Transactions);
+
     }
 }
