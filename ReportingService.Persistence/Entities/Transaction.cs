@@ -13,5 +13,6 @@ public class Transaction
     public TransactionType TransactionType { get; set; }
     //DENORMALIZED
     public Currency Currency { get; set; }
-    public Account Account { get; set; }
+    public Guid CustomerID { get; set; }
+
 }
