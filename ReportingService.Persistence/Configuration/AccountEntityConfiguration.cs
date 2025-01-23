@@ -17,8 +17,7 @@ internal static class AccountEntityConfiguration
         .IsRequired();
 
         builder.Entity<Account>().Property(x => x.Currency)
-        .IsRequired()
-        .HasMaxLength(7);
+        .IsRequired();
 
         builder.Entity<Account>().HasOne(x => x.Customer)
         .WithMany(y => y.Accounts)
