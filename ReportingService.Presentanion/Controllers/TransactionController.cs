@@ -6,7 +6,7 @@ using ReportingService.Presentanion.Models;
 // 
 namespace ReportingService.Presentanion.Controllers;
 
-[Route("api/customers")]
+[Route("api/transactions")]
 
 public class TransactionController : Controller
 {
