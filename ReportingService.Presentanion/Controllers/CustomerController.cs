@@ -28,4 +28,18 @@ public class CustomerController : Controller
     {
         return Ok(new CustomerResponse());
     }
+
+    [HttpGet]
+    public async Task<ActionResult<List<CustomerResponse>>> GetCustomersByTransactionsCountInPeriodAsync(
+            [FromQuery] int monthCount, [FromQuery] int transactionsCount)
+    {
+        return Ok(new List<CustomerResponse>());
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<CustomerResponse>>> GetCustomersByDepositDifferenceInPeriodAsync(
+            [FromQuery] decimal depDifference, [FromQuery] int monthCount)
+    {
+        return Ok(new List<CustomerResponse>());
+    }
 }

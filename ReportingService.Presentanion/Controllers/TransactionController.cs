@@ -11,17 +11,24 @@ namespace ReportingService.Presentanion.Controllers;
 public class TransactionController : Controller
 {
     [HttpGet]
-    public async Task<List<TransactionResponse>> GetTransactionsByCustomerId([FromQuery] Guid customerId, [FromQuery] int? monthCount)
+    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByCustomerIdAsync(
+            [FromQuery] Guid customerId, [FromQuery] int? monthCount)
     {
 
-        return new List<TransactionResponse>();
+        return Ok(new List<TransactionResponse>());
     }
 
     [HttpGet("{id}")]
-    public async Task<TransactionResponse> GetTransactionById(Guid id)
+    public async Task<ActionResult<TransactionResponse>> GetTransactionByIdAsync(Guid id)
     {
-        return new TransactionResponse();
+        return Ok(new TransactionResponse());
     }
 
+    [HttpGet]
+    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByAccountIdAsync(
+            [FromQuery] Guid customerId, [FromQuery] int? monthCount)
+    {
 
+        return Ok(new List<TransactionResponse>());
+    }
 }
