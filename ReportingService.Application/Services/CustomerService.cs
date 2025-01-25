@@ -1,6 +1,6 @@
 ﻿
 namespace ReportingService.Application.Services;
 
-internal class CustomerService
+public class CustomerService ()
 {
 }
