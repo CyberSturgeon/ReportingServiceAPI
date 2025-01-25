@@ -1,5 +1,5 @@
 ﻿
-using ReportingService.Persistence.Configuration;
+using ReportingService.Core.Configuration;
 
 namespace ReportingService.Application.Models;
 
