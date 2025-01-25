@@ -7,7 +7,7 @@ namespace ReportingService.Persistence.Configuration;
 
 internal static class ComissionEntityConfiguration
 {
-    internal static void Configure(this ModelBuilder builder)
+    internal static void ConfigureComission(this ModelBuilder builder)
     {
         builder.Entity<Comission>().Property(x => x.Id)
             .IsRequired()
@@ -17,9 +17,6 @@ internal static class ComissionEntityConfiguration
             .IsRequired();
 
         builder.Entity<Comission>().Property(x => x.Transaction)
-            .IsRequired();
-
-        builder.Entity<Comission>().Property(x => x.TransactionId)
             .IsRequired();
 
         builder.Entity<Comission>().HasOne(x => x.Transaction);
