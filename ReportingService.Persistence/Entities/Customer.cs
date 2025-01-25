@@ -1,4 +1,4 @@
-﻿using ReportingService.Persistence.Configuration;
+﻿using ReportingService.Core.Configuration;
 
 namespace ReportingService.Persistence.Entities;
 

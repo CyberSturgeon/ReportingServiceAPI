@@ -1,5 +1,5 @@
 ﻿
-namespace ReportingService.Persistence.Configuration;
+namespace ReportingService.Core.Configuration;
 
 public enum Role
 {
