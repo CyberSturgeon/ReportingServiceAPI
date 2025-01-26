@@ -13,12 +13,16 @@ namespace ReportingService.Application.Tests;
 public class CustomerServiceTests
 {
     private readonly Mock<ICustomerRepository> _customerRepositoryMock;
+    private readonly Mock<IAccountRepository> _accountRepositoryMock;
+    private readonly Mock<ITransactionRepository> _transactionRepositoryMock;
     private readonly Mapper _mapper;
     private readonly CustomerService _sut;
 
     public CustomerServiceTests()
     {
         _customerRepositoryMock = new Mock<ICustomerRepository>();
+        _accountRepositoryMock = new Mock<IAccountRepository>();
+        _transactionRepositoryMock = new Mock<ITransactionRepository>();
 
         var config = new MapperConfiguration(
             cfg =>
@@ -30,7 +34,7 @@ public class CustomerServiceTests
             });
         _mapper = new(config);
 
-        _sut = new(_customerRepositoryMock.Object, _mapper);
+        _sut = new(_customerRepositoryMock.Object, _transactionRepositoryMock.Object, _accountRepositoryMock.Object, _mapper);
     }
 
     [Fact]
@@ -52,8 +56,83 @@ public class CustomerServiceTests
         _customerRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(customer);
         var customerModel = _mapper.Map<CustomerModel>(customer);
 
-        var customerResponse = _sut.GetCustomerByIdAsync(id);
+        var customerResponse = _sut.GetCustomerByIdAsync(id).Result;
+
         _customerRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        Assert.Equivalent(customerModel, customerResponse);
+    }
+
+    [Fact]
+    public async Task GetFullCustomerByIdAsync_NonExistingUser_EntityNotFoundExceptionThrown()
+    {
+        var id = Guid.NewGuid();
+        var msg = $"Customer {id} not found";
+
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetFullCustomerByIdAsync(id));
+
+        _customerRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public async Task GetFullCustomerByIdAsync_ExistingUserNoAccounts_EntityNotFoundExceptionThrown()
+    {
+        var id = Guid.NewGuid();
+        var msg = $"Customer {id} have no accounts";
+        var customer = new Customer { Id = id };
+        _customerRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(customer);
+        var customerModel = _mapper.Map<CustomerModel>(customer);
+
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetFullCustomerByIdAsync(id));
+
+        _customerRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        _accountRepositoryMock.Verify(x => x.FindAsync(x => x.CustomerId == id), Times.Once);
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public async Task GetFullCustomerByIdAsync_ExistingUserHaveAccountsNoTransactions_GetSucess()
+    {
+        var id = Guid.NewGuid();
+        var msg = $"Customer {id} have no accounts";
+        var customer = new Customer { Id = id };
+        var accounts = new List<Account> { new Account { Id = id } };
+        _customerRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(customer);
+        _accountRepositoryMock.Setup(x => x.FindAsync(x => x.CustomerId == id).Result).Returns(accounts);   
+        var customerModel = _mapper.Map<CustomerModel>(customer);
+        var accountModels = _mapper.Map<List<AccountModel>>(accounts);
+        customerModel.Accounts = accountModels;
+
+        var customerResponse = _sut.GetFullCustomerByIdAsync(id).Result;
+
+        _customerRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        _accountRepositoryMock.Verify(x => x.FindAsync(x => x.CustomerId == id), Times.Once);
+        _transactionRepositoryMock.Verify(x => x.FindAsync(x => x.CustomerId == id), Times.Once);
+        Assert.Equivalent(customerModel, customerResponse);
+    }
+
+    [Fact]
+    public async Task GetFullCustomerByIdAsync_ExistingUserHaveAccountsHaveTransactions_GetSucess()
+    {
+        var id = Guid.NewGuid();
+        var msg = $"Customer {id} have no accounts";
+        var customer = new Customer { Id = id };
+        var accounts = new List<Account> { new Account { Id = id } };
+        var transactions = new List<Transaction> { new Transaction { Id = id } };
+        _customerRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(customer);
+        _accountRepositoryMock.Setup(x => x.FindAsync(x => x.CustomerId == id).Result).Returns(accounts);
+        _transactionRepositoryMock.Setup(x => x.FindAsync(x => x.CustomerId == id).Result).Returns(transactions);
+        var customerModel = _mapper.Map<CustomerModel>(customer);
+        var accountModels = _mapper.Map<List<AccountModel>>(accounts);
+        var transactionModels = _mapper.Map<List<TransactionModel>>(transactions);  
+        customerModel.Accounts = accountModels;
+        customerModel.Transactions = transactionModels;
+
+        var customerResponse = _sut.GetFullCustomerByIdAsync(id).Result;
+
+        _customerRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        _accountRepositoryMock.Verify(x => x.FindAsync(x => x.CustomerId == id), Times.Once);
+        _transactionRepositoryMock.Verify(x => x.FindAsync(x => x.CustomerId == id), Times.Once);
         Assert.Equivalent(customerModel, customerResponse);
     }
 }

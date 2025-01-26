@@ -3,7 +3,7 @@ using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Persistence.Repositories
 {
-    public class TransactionRepository(ReportingContext context): BaseRepository<Comission>(context), ITransactionRepository
+    public class TransactionRepository(ReportingContext context): BaseRepository<Transaction>(context), ITransactionRepository
     {
     }
 }

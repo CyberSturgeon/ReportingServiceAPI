@@ -2,6 +2,6 @@
 
 namespace ReportingService.Persistence.Repositories.Interfaces
 {
-    public interface IAccountRepository : IBaseRepository<Comission>
+    public interface IAccountRepository : IBaseRepository<Account>
     { }
 }
