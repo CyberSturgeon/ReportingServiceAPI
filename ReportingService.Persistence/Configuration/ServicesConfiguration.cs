@@ -15,5 +15,7 @@ public static class ServicesConfiguration
 
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IComissionRepository, ComissionRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
     }
 }
