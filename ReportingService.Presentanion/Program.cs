@@ -1,3 +1,6 @@
+using ReportingService.Application;
+using ReportingService.Persistence.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -12,6 +15,9 @@ builder.Configuration
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+var configuration = builder.Configuration;
+builder.Services.ConfigurePersistence(configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
