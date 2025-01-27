@@ -7,9 +7,7 @@ using ReportingService.Persistence.Repositories.Interfaces;
 namespace ReportingService.Application.Services;
 
 public class ComissionService(
-        ICustomerRepository customerRepository,
         ITransactionRepository transactionRepository,
-        IAccountRepository accountRepository,
         IComissionRepository comissionRepository,
         IMapper mapper)
 {

@@ -20,9 +20,9 @@ public class CustomerServiceTests
 
     public CustomerServiceTests()
     {
-        _customerRepositoryMock = new Mock<ICustomerRepository>();
-        _accountRepositoryMock = new Mock<IAccountRepository>();
-        _transactionRepositoryMock = new Mock<ITransactionRepository>();
+        _customerRepositoryMock = new();
+        _accountRepositoryMock = new();
+        _transactionRepositoryMock = new();
 
         var config = new MapperConfiguration(
             cfg =>
