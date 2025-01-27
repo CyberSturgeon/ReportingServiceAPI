@@ -1,11 +1,8 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Core.Configuration;
-using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
-using System.Linq;
 
 namespace ReportingService.Application.Services;
 
@@ -90,31 +87,32 @@ public class CustomerService (
         return customerModel;
     }
 
-    public async Task<IEnumerable<CustomerModel>> GetCustomersByBirth(DateTime birth)
-    {
-        var customers = await customerRepository.FindAsync(x => 
-            x.BirthDate.Day == birth.Day &&
-            x.BirthDate.Month == birth.Month);
-
-        var customerModels = mapper.Map<List<CustomerModel>>(customers);
-
-        return customerModels;
-    }
-
-    public async Task<IEnumerable<CustomerModel>> GetCustomers(
+    public async Task<IEnumerable<CustomerModel>> GetCustomersAsync(
         int? transactionsCount, int? accountsCount, DateTime? dateStart, DateTime? dateEnd,
-        List<Currency>? currencies)
+        List<Currency>? currencies, DateTime? birth)
     {
         var customers = await customerRepository.FindAsync(x =>
             transactionsCount == null || x.Transactions.Count >= transactionsCount &&
             accountsCount == null || x.Accounts.Count >= accountsCount &&
             dateStart == null || x.Transactions.Where(y => y.Date >= dateStart).Any() &&
             dateEnd == null || x.Transactions.Where(y => y.Date <= dateEnd).Any() &&
-            !currencies.Any() || x.Accounts.Where(y => currencies.Contains(y.Currency)).Any());
+            !currencies.Any() || x.Accounts.Where(y => currencies.Contains(y.Currency)).Any() &&
+            birth == null || x.BirthDate.Day == birth.Value.Day && x.BirthDate.Month == birth.Value.Month);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
         
         return customerModels;
     }
     //НУЖНА ПОМОЩЬ
+
+    //public async Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime birth)
+    //{
+    //    var customers = await customerRepository.FindAsync(x => 
+    //        x.BirthDate.Day == birth.Day &&
+    //        x.BirthDate.Month == birth.Month);
+
+    //    var customerModels = mapper.Map<List<CustomerModel>>(customers);
+
+    //    return customerModels;
+    //}
 }
