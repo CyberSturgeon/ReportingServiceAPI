@@ -6,7 +6,7 @@ namespace ReportingService.Application;
 
 public static class ServicesConfiguration
 {
-    public static void AddApplicationServices(this IServiceCollection services)
+    public static void ConfigureApplication(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(CustomerMapperProfile).Assembly,
                 typeof(TransactionMapperProfile).Assembly,

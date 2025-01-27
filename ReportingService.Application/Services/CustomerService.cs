@@ -51,15 +51,15 @@ public class CustomerService (
         return customerModel;
     }
 
-    public async Task<CustomerModel> GetCustomerByAccountIdAsync(Guid id)
+    public async Task<CustomerModel> GetCustomerByAccountIdAsync(Guid accountId)
     {
-        var account = await accountRepository.GetByIdAsync(id) ??
-            throw new EntityNotFoundException($"Account {id} not found");
+        var account = await accountRepository.GetByIdAsync(accountId) ??
+            throw new EntityNotFoundException($"Account {accountId} not found");
 
         var customersList = await customerRepository.FindAsync(x => x.Accounts.Contains(account));
         if (!customersList.Any())
         {
-            throw new EntityNotFoundException($"Customer with account {id} not found");
+            throw new EntityNotFoundException($"Customer with account {accountId} not found");
 
         }
         var customer = customersList.ToList().FirstOrDefault();
@@ -69,15 +69,15 @@ public class CustomerService (
         return customerModel;
     }
 
-    public async Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid id)
+    public async Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid transactionId)
     {
-        var transaction = await transactionRepository.GetByIdAsync(id) ??
-            throw new EntityNotFoundException($"Transaction {id} not found");
+        var transaction = await transactionRepository.GetByIdAsync(transactionId) ??
+            throw new EntityNotFoundException($"Transaction {transactionId} not found");
 
         var customersList = await customerRepository.FindAsync(x => x.Transactions.Contains(transaction));
         if (!customersList.Any())
         {
-            throw new EntityNotFoundException($"Customer with transaction {id} not found");
+            throw new EntityNotFoundException($"Customer with transaction {transactionId} not found");
 
         }
         var customer = customersList.ToList().FirstOrDefault();

@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 builder.Services.ConfigurePersistence(configuration);
-builder.Services.AddApplicationServices();
+builder.Services.ConfigureApplication();
 
 var app = builder.Build();
 
