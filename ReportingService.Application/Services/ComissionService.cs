@@ -2,6 +2,7 @@
 using AutoMapper;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
+using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services;
@@ -18,6 +19,27 @@ public class ComissionService(
         var comissionModel = mapper.Map<ComissionModel>(comission);
 
         return comissionModel;
+    }
+
+    public async Task<ComissionModel> AddComissionAsync(ComissionModel comissionModel)
+    {
+        var transaction = await transactionRepository.GetByIdAsync(comissionModel.TransactionId) ??
+            throw new EntityNotFoundException($"Transaction {comissionModel.TransactionId} related to comission not found");
+
+        var comission = await comissionRepository.AddAndReturnAsync(mapper.Map<Comission>(comissionModel));
+
+        return mapper.Map<ComissionModel>(comission);
+    }
+
+    public async Task TransactionalAddComissionsAsync(List<ComissionModel> comissionModels)
+    {
+        foreach (var comissionModel in comissionModels)
+        {
+            var transaction = await transactionRepository.GetByIdAsync(comissionModel.TransactionId) ??
+                throw new EntityNotFoundException($"Transaction {comissionModel.TransactionId} related to comission not found");
+        }
+
+        await comissionRepository.TransactionalAddRangeAsync(mapper.Map<List<Comission>>(comissionModels));
     }
 
     public async Task<ComissionModel> GetComissionByTransactionIdAsync(Guid transactionId)

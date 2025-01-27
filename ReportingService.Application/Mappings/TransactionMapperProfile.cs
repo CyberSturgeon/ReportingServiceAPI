@@ -9,8 +9,6 @@ public class TransactionMapperProfile : Profile
 {
     public TransactionMapperProfile()
     {
-        CreateMap<Transaction, TransactionModel>();
-
-        CreateMap<TransactionModel, Transaction>();
+        CreateMap<Transaction, TransactionModel>().ReverseMap();
     }
 }
