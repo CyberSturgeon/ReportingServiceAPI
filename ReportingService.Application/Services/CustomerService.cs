@@ -3,6 +3,7 @@ using AutoMapper;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Core.Configuration;
+using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 using System.Linq;
 
@@ -70,11 +71,50 @@ public class CustomerService (
 
         return customerModel;
     }
-    //public async Task<IEnumerable<CustomerModel>> GetCustomers(
-    //    int? transactionsCount, int? accountsCount, DateTime? dateStart, DateTime? dateEnd,
-    //    List<Currency>? currencies)
-    //{
-    //    var customers = await customerRepository.FindAsync()
-    //}
+
+    public async Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid id)
+    {
+        var transaction = await transactionRepository.GetByIdAsync(id) ??
+            throw new EntityNotFoundException($"Transaction {id} not found");
+
+        var customersList = await customerRepository.FindAsync(x => x.Transactions.Contains(transaction));
+        if (!customersList.Any())
+        {
+            throw new EntityNotFoundException($"Customer with transaction {id} not found");
+
+        }
+        var customer = customersList.ToList().FirstOrDefault();
+
+        var customerModel = mapper.Map<CustomerModel>(customer);
+
+        return customerModel;
+    }
+
+    public async Task<IEnumerable<CustomerModel>> GetCustomersByBirth(DateTime birth)
+    {
+        var customers = await customerRepository.FindAsync(x => 
+            x.BirthDate.Day == birth.Day &&
+            x.BirthDate.Month == birth.Month);
+
+        var customerModels = mapper.Map<List<CustomerModel>>(customers);
+
+        return customerModels;
+    }
+
+    public async Task<IEnumerable<CustomerModel>> GetCustomers(
+        int? transactionsCount, int? accountsCount, DateTime? dateStart, DateTime? dateEnd,
+        List<Currency>? currencies)
+    {
+        var customers = await customerRepository.FindAsync(x =>
+            transactionsCount == null || x.Transactions.Count >= transactionsCount &&
+            accountsCount == null || x.Accounts.Count >= accountsCount &&
+            dateStart == null || x.Transactions.Where(y => y.Date >= dateStart).Any() &&
+            dateEnd == null || x.Transactions.Where(y => y.Date <= dateEnd).Any() &&
+            !currencies.Any() || x.Accounts.Where(y => currencies.Contains(y.Currency)).Any());
+
+        var customerModels = mapper.Map<List<CustomerModel>>(customers);
+        
+        return customerModels;
+    }
     //НУЖНА ПОМОЩЬ
 }
