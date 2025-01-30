@@ -2,6 +2,8 @@
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Core.Configuration;
+using ReportingService.Persistence.Entities;
+using ReportingService.Persistence.Repositories;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services;
@@ -20,6 +22,13 @@ public class CustomerService (
         var customerModel = mapper.Map<CustomerModel>(customer);
 
         return customerModel;
+    }
+
+    public async Task AddCustomerAsync(CustomerModel customerModel)
+    {
+        
+
+        await customerRepository.AddAsync(mapper.Map<Customer>(customerModel));
     }
 
     public async Task<CustomerModel> GetFullCustomerByIdAsync(Guid id)
@@ -92,12 +101,12 @@ public class CustomerService (
         List<Currency>? currencies, DateTime? birth)
     {
         var customers = await customerRepository.FindAsync(x =>
-            transactionsCount == null || x.Transactions.Count >= transactionsCount &&
-            accountsCount == null || x.Accounts.Count >= accountsCount &&
-            dateStart == null || x.Transactions.Where(y => y.Date >= dateStart).Any() &&
-            dateEnd == null || x.Transactions.Where(y => y.Date <= dateEnd).Any() &&
-            !currencies.Any() || x.Accounts.Where(y => currencies.Contains(y.Currency)).Any() &&
-            birth == null || x.BirthDate.Day == birth.Value.Day && x.BirthDate.Month == birth.Value.Month);
+            transactionsCount == default(int) || x.Transactions.Count >= transactionsCount &&
+            accountsCount == default(int) || x.Accounts.Count >= accountsCount &&
+            dateStart == default(DateTime) || x.Transactions.Where(y => y.Date >= dateStart).Any() &&
+            dateEnd == default(DateTime) || x.Transactions.Where(y => y.Date <= dateEnd).Any() &&
+            currencies == default(List<Currency>) || x.Accounts.Where(y => currencies.Contains(y.Currency)).Any() &&
+            birth == default(DateTime) || x.BirthDate.Day == birth.Value.Day && x.BirthDate.Month == birth.Value.Month);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
         

@@ -21,14 +21,12 @@ public class ComissionService(
         return comissionModel;
     }
 
-    public async Task<ComissionModel> AddComissionAsync(ComissionModel comissionModel)
+    public async Task AddComissionAsync(ComissionModel comissionModel)
     {
         var transaction = await transactionRepository.GetByIdAsync(comissionModel.TransactionId) ??
             throw new EntityNotFoundException($"Transaction {comissionModel.TransactionId} related to comission not found");
 
-        var comission = await comissionRepository.AddAndReturnAsync(mapper.Map<Comission>(comissionModel));
-
-        return mapper.Map<ComissionModel>(comission);
+        await comissionRepository.AddAsync(mapper.Map<Comission>(comissionModel));
     }
 
     public async Task TransactionalAddComissionsAsync(List<ComissionModel> comissionModels)

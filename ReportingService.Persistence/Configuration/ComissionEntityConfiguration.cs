@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Persistence.Configuration;
