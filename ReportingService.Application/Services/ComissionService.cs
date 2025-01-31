@@ -31,10 +31,22 @@ public class ComissionService(
 
     public async Task TransactionalAddComissionsAsync(List<ComissionModel> comissionModels)
     {
-        foreach (var comissionModel in comissionModels)
+        var transactionIds = comissionModels.Select(cm => cm.TransactionId).Distinct().ToList();
+
+        var transactionModels = mapper.Map<List<TransactionModel>>(await transactionRepository
+                .FindManyAsync(x => transactionIds.Contains(x.Id)));
+
+        if (!transactionModels.Any())
         {
-            var transaction = await transactionRepository.GetByIdAsync(comissionModel.TransactionId) ??
-                throw new EntityNotFoundException($"Transaction {comissionModel.TransactionId} related to comission not found");
+            throw new EntityNotFoundException("No one transaction related to comissions");
+        }
+
+        foreach (var comission in comissionModels)
+        {
+            if (!transactionModels.Contains(comission.Transaction))
+            {
+                comissionModels.Remove(comission);
+            }
         }
 
         await comissionRepository.TransactionalAddRangeAsync(mapper.Map<List<Comission>>(comissionModels));
