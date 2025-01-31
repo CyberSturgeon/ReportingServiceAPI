@@ -9,7 +9,6 @@ public class ComissionMapperProfile : Profile
 {
     public ComissionMapperProfile()
     {
-        CreateMap<Comission, ComissionModel>()
-            .ForMember(x => x.Transaction, opt => opt.MapFrom(y => y.Transaction)).ReverseMap();
+        CreateMap<Comission, ComissionModel>().ReverseMap();
     }
 }

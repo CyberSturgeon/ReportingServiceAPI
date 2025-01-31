@@ -24,15 +24,7 @@ public class CustomerServiceTests
         _accountRepositoryMock = new();
         _transactionRepositoryMock = new();
 
-        var config = new MapperConfiguration(
-            cfg =>
-            {
-                cfg.AddProfile(new CustomerMapperProfile());
-                cfg.AddProfile(new AccountMapperProfile());
-                cfg.AddProfile(new TransactionMapperProfile());
-                cfg.AddProfile(new ComissionMapperProfile());
-            });
-        _mapper = new(config);
+        _mapper.ConfigureMapper();
 
         _sut = new(_customerRepositoryMock.Object, _transactionRepositoryMock.Object, _accountRepositoryMock.Object, _mapper);
     }

@@ -8,8 +8,6 @@ public class CustomerMapperProfile : Profile
 {
     public CustomerMapperProfile()
     {
-        CreateMap<Customer, CustomerModel>()
-            .ForMember(x => x.Accounts, opt => opt.MapFrom(y => y.Accounts))
-            .ForMember(x => x.Transactions, opt => opt.MapFrom(y => y.Transactions)).ReverseMap();
+        CreateMap<Customer, CustomerModel>().ReverseMap();
     }
 }
