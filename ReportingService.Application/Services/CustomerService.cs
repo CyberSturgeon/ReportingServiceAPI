@@ -34,13 +34,13 @@ public class CustomerService (
         var customer = await customerRepository.GetByIdAsync(id) ??
             throw new EntityNotFoundException($"Customer {id} not found");
 
-        var accounts = await accountRepository.FindAsync(x => x.CustomerId == id);
+        var accounts = await accountRepository.FindManyAsync(x => x.CustomerId == id);
         if(!accounts.Any())
         {
             throw new EntityNotFoundException($"Customer {id} have no accounts");
         }
 
-        var transactions = await transactionRepository.FindAsync(x => x.CustomerId == id);
+        var transactions = await transactionRepository.FindManyAsync(x => x.CustomerId == id);
 
         var customerModel = mapper.Map<CustomerModel>(customer);
 
@@ -63,13 +63,8 @@ public class CustomerService (
         var account = await accountRepository.GetByIdAsync(accountId) ??
             throw new EntityNotFoundException($"Account {accountId} not found");
 
-        var customersList = await customerRepository.FindAsync(x => x.Accounts.Contains(account));
-        if (!customersList.Any())
-        {
+        var customer = await customerRepository.FindAsync(x => x.Accounts.Contains(account)) ??
             throw new EntityNotFoundException($"Customer with account {accountId} not found");
-
-        }
-        var customer = customersList.ToList().FirstOrDefault();
         
         var customerModel = mapper.Map<CustomerModel>(customer);
 
@@ -81,13 +76,8 @@ public class CustomerService (
         var transaction = await transactionRepository.GetByIdAsync(transactionId) ??
             throw new EntityNotFoundException($"Transaction {transactionId} not found");
 
-        var customersList = await customerRepository.FindAsync(x => x.Transactions.Contains(transaction));
-        if (!customersList.Any())
-        {
+        var customer = await customerRepository.FindAsync(x => x.Transactions.Contains(transaction)) ??
             throw new EntityNotFoundException($"Customer with transaction {transactionId} not found");
-
-        }
-        var customer = customersList.ToList().FirstOrDefault();
 
         var customerModel = mapper.Map<CustomerModel>(customer);
 
@@ -98,7 +88,7 @@ public class CustomerService (
         int? transactionsCount, int? accountsCount, DateTime? dateStart, DateTime? dateEnd,
         List<Currency>? currencies, DateTime? birth)
     {
-        var customers = await customerRepository.FindAsync(x =>
+        var customers = await customerRepository.FindManyAsync(x =>
             transactionsCount == default(int) || x.Transactions.Count >= transactionsCount &&
             accountsCount == default(int) || x.Accounts.Count >= accountsCount &&
             dateStart == default(DateTime) || x.Transactions.Where(y => y.Date >= dateStart).Any() &&
@@ -114,7 +104,7 @@ public class CustomerService (
 
     //public async Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime birth)
     //{
-    //    var customers = await customerRepository.FindAsync(x => 
+    //    var customers = await customerRepository.FindManyAsync(x => 
     //        x.BirthDate.Day == birth.Day &&
     //        x.BirthDate.Month == birth.Month);
 

@@ -45,13 +45,11 @@ public class ComissionService(
         var transaction = await transactionRepository.GetByIdAsync(transactionId) ??
             throw new EntityNotFoundException($"Transaction {transactionId} not found");
 
-        var comissionList = await comissionRepository.FindAsync(
-            x => x.Transaction.Id == transactionId);
-        if (!comissionList.Any())
-        {
-            throw new EntityNotFoundException($"Comssion with transaction {transactionId} not found");
-        }
-        var comissionModel = mapper.Map<ComissionModel>(comissionList.ToList().FirstOrDefault());
+        var comission = await comissionRepository.FindAsync(
+            x => x.Transaction.Id == transactionId) ??
+                throw new EntityNotFoundException($"Comssion with transaction {transactionId} not found");
+
+        var comissionModel = mapper.Map<ComissionModel>(comission);
 
         return comissionModel;
     }
@@ -59,7 +57,7 @@ public class ComissionService(
     public async Task<IEnumerable<ComissionModel>> GetComissionsAsync(Guid? customerId, Guid? accountId,
                     DateTime? dateStart, DateTime? dateEnd)
     {
-        var commisions = await comissionRepository.FindAsync(x => 
+        var commisions = await comissionRepository.FindManyAsync(x => 
             customerId == null || x.Transaction.CustomerId == customerId &&
             accountId == null || x.Transaction.AccountId == accountId &&
             dateStart == null || x.Transaction.Date >= dateStart &&

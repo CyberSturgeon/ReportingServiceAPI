@@ -84,14 +84,14 @@ public class ComissionServiceTests
         var transaction = new Transaction { Id = id };
         var comission = new Comission { Id = id };
         _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(transaction);
-        _comissionRepositoryMock.Setup(x => x.FindAsync(x => x.Transaction.Id == id))
+        _comissionRepositoryMock.Setup(x => x.FindManyAsync(x => x.Transaction.Id == id))
             .ReturnsAsync(new List<Comission> { comission });
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
         var comissionResponse = await _sut.GetComissionByTransactionIdAsync(id);
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
-        _comissionRepositoryMock.Verify(x => x.FindAsync(x => x.Transaction.Id == id), Times.Once);
+        _comissionRepositoryMock.Verify(x => x.FindManyAsync(x => x.Transaction.Id == id), Times.Once);
         Assert.Equivalent(comissionModel, comissionResponse);
     }
 
