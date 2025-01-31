@@ -51,7 +51,7 @@ public class ComissionServiceTests
         var id = Guid.NewGuid();
         
         var comission = new Comission { Id = id };
-        _comissionRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(comission);
+        _comissionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(comission);
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
         var comissionResponse = await _sut.GetComissionByIdAsync(id);
@@ -77,7 +77,7 @@ public class ComissionServiceTests
         var id = Guid.NewGuid();
         var transaction = new Transaction { Id = id };
         var msg = ($"Comssion with transaction {id} not found");
-        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(transaction);
+        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(transaction);
 
         var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetComissionByTransactionIdAsync(id));
 
@@ -91,9 +91,9 @@ public class ComissionServiceTests
         var id = Guid.NewGuid();
         var transaction = new Transaction { Id = id };
         var comission = new Comission { Id = id };
-        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(transaction);
-        _comissionRepositoryMock.Setup(x => x.FindAsync(x => x.Transaction.Id == id).Result)
-            .Returns(new List<Comission> { comission });
+        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(transaction);
+        _comissionRepositoryMock.Setup(x => x.FindAsync(x => x.Transaction.Id == id))
+            .ReturnsAsync(new List<Comission> { comission });
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
         var comissionResponse = await _sut.GetComissionByTransactionIdAsync(id);
@@ -121,7 +121,7 @@ public class ComissionServiceTests
         var id = Guid.NewGuid();
         var comissionModel = new ComissionModel {Id = id, TransactionId = id};
         var comission = _mapper.Map<Comission>(comissionModel);
-        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id).Result).Returns(new Transaction { Id = id });
+        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Transaction { Id = id });
 
         await _sut.AddComissionAsync(comissionModel);
 

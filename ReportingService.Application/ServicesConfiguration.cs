@@ -8,9 +8,6 @@ public static class ServicesConfiguration
 {
     public static void ConfigureApplication(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(CustomerMapperProfile).Assembly,
-                typeof(TransactionMapperProfile).Assembly,
-                typeof(ComissionMapperProfile).Assembly,
-                typeof(AccountMapperProfile).Assembly);
+        services.AddAutoMapper(typeof(CustomerMapperProfile).Assembly);
     }
 }

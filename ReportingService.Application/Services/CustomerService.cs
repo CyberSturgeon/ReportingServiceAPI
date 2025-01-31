@@ -26,8 +26,6 @@ public class CustomerService (
 
     public async Task AddCustomerAsync(CustomerModel customerModel)
     {
-        
-
         await customerRepository.AddAsync(mapper.Map<Customer>(customerModel));
     }
 
