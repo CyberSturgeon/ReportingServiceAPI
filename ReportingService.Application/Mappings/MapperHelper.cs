@@ -4,7 +4,7 @@ namespace ReportingService.Application.Mappings;
 
 public static class MapperHelper
 {
-    public static void ConfigureMapper(this Mapper mapper)
+    public static MapperConfiguration ConfigureMapper()
     {
         var config = new MapperConfiguration(cfg =>
         {
@@ -13,6 +13,6 @@ public static class MapperHelper
             cfg.AddProfile(new TransactionMapperProfile());
             cfg.AddProfile(new ComissionMapperProfile());
         });
-        mapper = new(config);
+        return config;
     }
 }
