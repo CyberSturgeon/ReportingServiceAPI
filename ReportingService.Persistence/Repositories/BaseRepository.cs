@@ -21,7 +21,7 @@ public class BaseRepository<TEntity>(ReportingContext Context) : IBaseRepository
 
     public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        return await DbSet.FirstOrDefaultAsync(predicate);
+        return await DbSet.SingleOrDefaultAsync(predicate);
     }
 
     public virtual async Task<IEnumerable<TEntity>> FindManyAsync(Expression<Func<TEntity, bool>> predicate)
