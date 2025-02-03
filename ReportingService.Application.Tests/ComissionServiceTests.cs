@@ -4,6 +4,7 @@ using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services;
+using ReportingService.Application.Tests.TestCases;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 using System.Linq.Expressions;
@@ -39,16 +40,15 @@ public class ComissionServiceTests
 
     [Fact]
     public async Task GetComissionByIdAsync_ExistsComission_GetSucess()
-    {
-        var id = Guid.NewGuid();
-        
-        var comission = new Comission { Id = id };
-        _comissionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(comission);
+    {   
+        var comission = ComissionTestCase.GetComissionEntity(null, null);
+
+        _comissionRepositoryMock.Setup(x => x.GetByIdAsync(comission.Id)).ReturnsAsync(comission);
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
-        var comissionResponse = await _sut.GetComissionByIdAsync(id);
+        var comissionResponse = await _sut.GetComissionByIdAsync(comission.Id);
 
-        _comissionRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        _comissionRepositoryMock.Verify(x => x.GetByIdAsync(comission.Id), Times.Once);
         Assert.Equivalent(comissionModel, comissionResponse);
     }
 
@@ -66,32 +66,30 @@ public class ComissionServiceTests
     [Fact]
     public async Task GetComissionByTransactionIdAsync_ExistsTransactionNonExistsComission_EntityNotFoundExceptionThrown()
     {
-        var id = Guid.NewGuid();
-        var transaction = new Transaction { Id = id };
-        var msg = ($"Comssion with transaction {id} not found");
-        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(transaction);
+        var transaction = TransactionTestCase.GetTransactionEntity(null, null);
+        var msg = ($"Comssion with transaction {transaction.Id} not found");
+        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetComissionByTransactionIdAsync(id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetComissionByTransactionIdAsync(transaction.Id));
 
-        _transactionRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
         Assert.Equal(msg, ex.Message);
     }
 
     [Fact]
     public async Task GetComissionByTransactionIdAsync_ExistsTransactionExistsComission_GetSucess()
     {
-        var id = Guid.NewGuid();
-        var transaction = new Transaction { Id = id };
-        var comission = new Comission { Id = id };
-        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(transaction);
-        _comissionRepositoryMock.Setup(x => x.FindAsync(x => x.Transaction.Id == id))
+        var transaction = TransactionTestCase.GetTransactionEntity(null, null);
+        var comission = ComissionTestCase.GetComissionEntity(null, null);
+        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
+        _comissionRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>()))
             .ReturnsAsync(comission);
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
-        var comissionResponse = await _sut.GetComissionByTransactionIdAsync(id);
+        var comissionResponse = await _sut.GetComissionByTransactionIdAsync(transaction.Id);
 
-        _transactionRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
-        _comissionRepositoryMock.Verify(x => x.FindAsync(x => x.Transaction.Id == id), Times.Once);
+        _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
+        _comissionRepositoryMock.Verify(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>()), Times.Once);
         Assert.Equivalent(comissionModel, comissionResponse);
     }
 
@@ -99,7 +97,7 @@ public class ComissionServiceTests
     public async Task AddComissionAsync_NonExistsTransaction_EntityNotFoundExceptionThrown()
     {
         var id = Guid.NewGuid();
-        var comissionModel = new ComissionModel { TransactionId = id };
+        var comissionModel = ComissionTestCase.GetComissionModel(id, null);
         var msg = $"Transaction {id} related to comission not found";
 
         var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.AddComissionAsync(comissionModel));
@@ -110,16 +108,16 @@ public class ComissionServiceTests
     [Fact]
     public async Task AddComissionAsync_ExistsTransaction_AddSucess()
     {
-        var id = Guid.NewGuid();
-        var comissionModel = new ComissionModel {Id = id, TransactionId = id};
-        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Transaction { Id = id });
+        var transaction = TransactionTestCase.GetTransactionEntity(null, null);
+        var comissionModel = ComissionTestCase.GetComissionModel(transaction.Id, null);
+        _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
         _comissionRepositoryMock.Setup(x =>
             x.AddAndReturnAsync(It.Is<Comission>(x =>
-                x.Id == id && x.TransactionId == id))).ReturnsAsync(_mapper.Map<Comission>(comissionModel));
+                x.Id == comissionModel.Id && x.TransactionId == transaction.Id))).ReturnsAsync(_mapper.Map<Comission>(comissionModel));
 
         var comissionResponse = await _sut.AddComissionAsync(comissionModel);
 
-        _transactionRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
+        _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
         _comissionRepositoryMock.Verify(x =>
             x.AddAndReturnAsync(It.Is<Comission>(x => x.Id == comissionModel.Id &&
             x.TransactionId == comissionModel.TransactionId)), Times.Once);
@@ -129,9 +127,9 @@ public class ComissionServiceTests
     [Fact]
     public async Task TransactionalAddComissionsAsync_NoOneTransactionsRelatedToComissions_EntityNotFoundExceptionTrown()
     {
-        var comissionModels = new List<ComissionModel> { new ComissionModel { TransactionId = Guid.NewGuid()},
-                                                         new ComissionModel { TransactionId = Guid.NewGuid()},
-                                                         new ComissionModel { TransactionId = Guid.NewGuid()}};
+        var comissionModels = new List<ComissionModel> { ComissionTestCase.GetComissionModel(null, null),
+                                                         ComissionTestCase.GetComissionModel(null, null),
+                                                         ComissionTestCase.GetComissionModel(null, null)};
 
         var msg = "No one transaction related to comissions";
 
@@ -144,16 +142,16 @@ public class ComissionServiceTests
     public async Task TransactionalAddComissionsAsync_OneComissionNoRelatedToTransaction_SucessAddTwoComissions()
     {
         var transactions = new List<Transaction> {
-            new Transaction { Id = Guid.NewGuid() },
-            new Transaction { Id = Guid.NewGuid() }};
+            TransactionTestCase.GetTransactionEntity(null, null),
+            TransactionTestCase.GetTransactionEntity(null, null)};
 
         var comissionModels = new List<ComissionModel> {
-            new ComissionModel { TransactionId = transactions[0].Id, Transaction = _mapper.Map<TransactionModel>(transactions[0]) },
-            new ComissionModel { TransactionId = transactions[1].Id, Transaction = _mapper.Map<TransactionModel>(transactions[1])},
-            new ComissionModel()};
+            ComissionTestCase.GetComissionModel(transactions[0].Id, _mapper.Map<TransactionModel>(transactions[0])),
+            ComissionTestCase.GetComissionModel(transactions[1].Id, _mapper.Map<TransactionModel>(transactions[1])),
+            ComissionTestCase.GetComissionModel(null, null)};
 
         _transactionRepositoryMock.Setup(x => x.FindManyAsync(It.IsAny<Expression<Func<Transaction, bool>>>()))
-            .ReturnsAsync(transactions); // Не работает x2
+            .ReturnsAsync(transactions);
 
         await _sut.TransactionalAddComissionsAsync(comissionModels);
 
