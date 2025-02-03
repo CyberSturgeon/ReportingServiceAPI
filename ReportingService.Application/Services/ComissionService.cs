@@ -21,12 +21,14 @@ public class ComissionService(
         return comissionModel;
     }
 
-    public async Task AddComissionAsync(ComissionModel comissionModel)
+    public async Task<ComissionModel> AddComissionAsync(ComissionModel comissionModel)
     {
         var transaction = await transactionRepository.GetByIdAsync(comissionModel.TransactionId) ??
             throw new EntityNotFoundException($"Transaction {comissionModel.TransactionId} related to comission not found");
 
-        await comissionRepository.AddAsync(mapper.Map<Comission>(comissionModel));
+        var comission = await comissionRepository.AddAndReturnAsync(mapper.Map<Comission>(comissionModel));
+
+        return mapper.Map<ComissionModel>(comission);
     }
 
     public async Task TransactionalAddComissionsAsync(List<ComissionModel> comissionModels)
@@ -34,20 +36,15 @@ public class ComissionService(
         var transactionIds = comissionModels.Select(cm => cm.TransactionId).Distinct().ToList();
 
         var transactionModels = mapper.Map<List<TransactionModel>>(await transactionRepository
-                .FindManyAsync(x => transactionIds.Contains(x.Id)));
+                .FindManyAsync(x => transactionIds.Contains(x.Id))).ToList();
 
         if (!transactionModels.Any())
         {
             throw new EntityNotFoundException("No one transaction related to comissions");
         }
 
-        foreach (var comission in comissionModels)
-        {
-            if (!transactionModels.Contains(comission.Transaction))
-            {
-                comissionModels.Remove(comission);
-            }
-        }
+        transactionIds = transactionModels.Select(x => x.Id).Distinct().ToList();
+        comissionModels.RemoveAll(x => !transactionIds.Contains(x.TransactionId));
 
         await comissionRepository.TransactionalAddRangeAsync(mapper.Map<List<Comission>>(comissionModels));
     }

@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using Moq;
+using ReportingService.Core.Configuration;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
 using ReportingService.Application.Models;
@@ -44,7 +45,11 @@ public class CustomerServiceTests
     public async Task GetCustomerByIdAsync_ExistingUser_GetSucess()
     {
         var id = Guid.NewGuid();
-        var customer = new Customer { Id = id };
+        var customer = new Customer 
+        { 
+            Id = id, 
+            Role = Role.Regular,
+        };
         _customerRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(customer);
         var customerModel = _mapper.Map<CustomerModel>(customer);
 
@@ -210,6 +215,21 @@ public class CustomerServiceTests
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
         _customerRepositoryMock.Verify(x => x.FindAsync(x => x.Transactions.Contains(transaction)), Times.Once);
+        Assert.Equivalent(customerModel, customerResponse);
+    }
+
+    [Fact]
+    public async Task AddCustomerAsync_AddSucess()
+    {
+        var id = Guid.NewGuid();
+        var customer = new Customer { Id = id };
+        _customerRepositoryMock.Setup(x =>
+            x.AddAndReturnAsync(It.Is<Customer>(x => x.Id == customer.Id))).ReturnsAsync(customer);
+        var customerModel = _mapper.Map<CustomerModel>(customer);
+
+        var customerResponse = await _sut.AddCustomerAsync(customerModel);
+
+        _customerRepositoryMock.Verify(x => x.AddAndReturnAsync(It.Is<Customer>(x => x.Id == customer.Id)), Times.Once);
         Assert.Equivalent(customerModel, customerResponse);
     }
 }

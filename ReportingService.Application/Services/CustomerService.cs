@@ -14,6 +14,13 @@ public class CustomerService (
         IAccountRepository accountRepository,
         IMapper mapper)
 {
+    public async Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel)
+    {
+        var customer = await customerRepository.AddAndReturnAsync(mapper.Map<Customer>(customerModel));
+
+        return mapper.Map<CustomerModel>(customer);
+    }
+
     public async Task<CustomerModel> GetCustomerByIdAsync(Guid id)
     {
         var customer = await customerRepository.GetByIdAsync(id) ??
@@ -22,11 +29,6 @@ public class CustomerService (
         var customerModel = mapper.Map<CustomerModel>(customer);
 
         return customerModel;
-    }
-
-    public async Task AddCustomerAsync(CustomerModel customerModel)
-    {
-        await customerRepository.AddAsync(mapper.Map<Customer>(customerModel));
     }
 
     public async Task<CustomerModel> GetFullCustomerByIdAsync(Guid id)

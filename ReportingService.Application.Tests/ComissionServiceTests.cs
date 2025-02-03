@@ -6,6 +6,7 @@ using ReportingService.Application.Models;
 using ReportingService.Application.Services;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace ReportingService.Application.Tests;
 
@@ -112,13 +113,17 @@ public class ComissionServiceTests
         var id = Guid.NewGuid();
         var comissionModel = new ComissionModel {Id = id, TransactionId = id};
         _transactionRepositoryMock.Setup(x => x.GetByIdAsync(id)).ReturnsAsync(new Transaction { Id = id });
+        _comissionRepositoryMock.Setup(x =>
+            x.AddAndReturnAsync(It.Is<Comission>(x =>
+                x.Id == id && x.TransactionId == id))).ReturnsAsync(_mapper.Map<Comission>(comissionModel));
 
-        await _sut.AddComissionAsync(comissionModel);
+        var comissionResponse = await _sut.AddComissionAsync(comissionModel);
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(id), Times.Once);
         _comissionRepositoryMock.Verify(x =>
-            x.AddAsync(It.Is<Comission>(x => x.Id == comissionModel.Id &&
+            x.AddAndReturnAsync(It.Is<Comission>(x => x.Id == comissionModel.Id &&
             x.TransactionId == comissionModel.TransactionId)), Times.Once);
+        Assert.Equivalent(comissionModel, comissionResponse);
     }
 
     [Fact]
@@ -145,11 +150,10 @@ public class ComissionServiceTests
         var comissionModels = new List<ComissionModel> {
             new ComissionModel { TransactionId = transactions[0].Id, Transaction = _mapper.Map<TransactionModel>(transactions[0]) },
             new ComissionModel { TransactionId = transactions[1].Id, Transaction = _mapper.Map<TransactionModel>(transactions[1])},
-            new ComissionModel { TransactionId = Guid.NewGuid()}};
-        var transactionIds = new List<Guid> { transactions[0].Id, transactions[1].Id };
+            new ComissionModel()};
 
-        _transactionRepositoryMock.Setup(x => x.FindManyAsync(x => transactionIds.Contains(x.Id)))
-            .ReturnsAsync(transactions); // Не работает
+        _transactionRepositoryMock.Setup(x => x.FindManyAsync(It.IsAny<Expression<Func<Transaction, bool>>>()))
+            .ReturnsAsync(transactions); // Не работает x2
 
         await _sut.TransactionalAddComissionsAsync(comissionModels);
 
