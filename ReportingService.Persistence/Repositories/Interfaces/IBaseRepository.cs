@@ -7,7 +7,8 @@ namespace ReportingService.Persistence.Repositories.Interfaces
         Task<TEntity> AddAndReturnAsync(TEntity entity);
         Task AddAsync(TEntity entity);
         Task AddRangeAsync(IEnumerable<TEntity> entities);
-        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> FindManyAsync(Expression<Func<TEntity, bool>> predicate);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity?> GetByIdAsync(object id);
         Task RemoveAsync(TEntity entity);

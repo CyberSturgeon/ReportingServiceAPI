@@ -29,7 +29,5 @@ internal static class TransactionEntityConfiguration
 
         builder.Entity<Transaction>().Property(x => x.CustomerId)
         .IsRequired(); 
-
-
     }
 }

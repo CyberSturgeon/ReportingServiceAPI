@@ -1,8 +1,9 @@
-﻿using ReportingService.Core.Configuration;
+﻿
+using ReportingService.Core.Configuration;
 
-namespace ReportingService.Persistence.Entities;
+namespace ReportingService.Application.Models;
 
-public class Customer
+public class CustomerModel
 {
     public Guid Id { get; set; }
     public Role Role { get; set; }
@@ -13,8 +14,8 @@ public class Customer
     public DateTime BirthDate { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public ICollection<Account> Accounts { get; set; } = [];
+    public ICollection<AccountModel> Accounts { get; set; } = [];
     public bool IsDeactivated { get; set; }
     // DENORMALIZED
-    public ICollection<Transaction> Transactions { get; set; } = [];
+    public ICollection<TransactionModel> Transactions { get; set; } = [];
 }

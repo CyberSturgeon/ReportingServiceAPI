@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingService.Presentanion", "ReportingService.Presentanion\ReportingService.Presentanion.csproj", "{D27848DA-57B1-4A0A-B84A-688652859D6B}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingService.Persistence", "ReportingService.Persistence\ReportingService.Persistence.csproj", "{91FF351F-6579-4B2F-8720-B6D96147E4D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingService.Application", "ReportingService.Application\ReportingService.Application.csproj", "{CC4881BD-6942-4DBA-AF75-DD67879AAAA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingService.Application.Tests", "ReportingService.Application.Tests\ReportingService.Application.Tests.csproj", "{6A7EABF6-4BDC-46C2-8380-7E20A47F5D97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CC4881BD-6942-4DBA-AF75-DD67879AAAA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC4881BD-6942-4DBA-AF75-DD67879AAAA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC4881BD-6942-4DBA-AF75-DD67879AAAA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A7EABF6-4BDC-46C2-8380-7E20A47F5D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A7EABF6-4BDC-46C2-8380-7E20A47F5D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A7EABF6-4BDC-46C2-8380-7E20A47F5D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A7EABF6-4BDC-46C2-8380-7E20A47F5D97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
