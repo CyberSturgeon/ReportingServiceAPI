@@ -10,25 +10,15 @@ namespace ReportingService.Presentanion.Controllers;
 
 public class TransactionController : Controller
 {
-    [HttpGet]
-    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByCustomerIdAsync(
-            [FromQuery] Guid customerId, [FromQuery] int? monthCount)
-    {
-
-        return Ok(new List<TransactionResponse>());
-    }
-
     [HttpGet("{id}")]
-    public async Task<ActionResult<TransactionResponse>> GetTransactionByIdAsync(Guid id)
+    public async Task<ActionResult<TransactionResponse>> GetTransactionByIdAsync([FromRoute] Guid id)
     {
         return Ok(new TransactionResponse());
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<TransactionResponse>>> GetTransactionsByAccountIdAsync(
-            [FromQuery] Guid customerId, [FromQuery] int? monthCount)
+    [HttpGet("{id}/customer")]
+    public async Task<ActionResult<CustomerResponse>> GetCustomerByTransactionIdAsync([FromRoute] Guid id)
     {
-
-        return Ok(new List<TransactionResponse>());
+        return Ok(new CustomerResponse());
     }
 }

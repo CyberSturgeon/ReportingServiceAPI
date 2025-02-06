@@ -1,44 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReportingService.Core.Configuration;
 using ReportingService.Presentanion.Models;
 
 namespace ReportingService.Presentanion.Controllers;
 [Route("api/customers")]
 public class CustomerController : Controller
 {
-    [HttpGet]
-    public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync([FromQuery] Guid id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync([FromRoute] Guid id)
     {
         return Ok(new CustomerResponse());
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateTime birth)
+    [HttpGet("birth-date")]
+    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateTime birth)
     {
         return Ok(new List<CustomerResponse>());
     }
 
-    [HttpGet]
-    public async Task<ActionResult<CustomerResponse>> GetCustomerByAccountIdAsync([FromQuery] Guid accountId)
+    [HttpGet("{id}/transactions")]
+    public async Task<ActionResult<CustomerResponse>> GetTransactionsByCustomerIdAsync(
+            [FromRoute] Guid Id, [FromQuery] int? monthCount)
     {
         return Ok(new CustomerResponse());
     }
 
     [HttpGet]
-    public async Task<ActionResult<CustomerResponse>> GetCustomerByTransactionIdAsync([FromQuery] Guid transactionId)
-    {
-        return Ok(new CustomerResponse());
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<List<CustomerResponse>>> GetCustomersByTransactionsCountInPeriodAsync(
-            [FromQuery] int monthCount, [FromQuery] int transactionsCount)
-    {
-        return Ok(new List<CustomerResponse>());
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<List<CustomerResponse>>> GetCustomersByDepositDifferenceInPeriodAsync(
-            [FromQuery] decimal depDifference, [FromQuery] int monthCount)
+    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByFilterdAsync([FromQuery] CustomerFilterRequest request)
     {
         return Ok(new List<CustomerResponse>());
     }
