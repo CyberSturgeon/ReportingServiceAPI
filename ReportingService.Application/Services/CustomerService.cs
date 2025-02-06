@@ -86,17 +86,28 @@ public class CustomerService (
         return customerModel;
     }
 
+    public async Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime dateStart, DateTime dateEnd)
+    {
+        var customers = await customerRepository.FindManyAsync(x =>
+            x.BirthDate.Date >= dateStart.Date &&
+            x.BirthDate.Date <= dateEnd);
+
+        var customerModels = mapper.Map<List<CustomerModel>>(customers);
+
+        return customerModels;
+    }
+
     public async Task<IEnumerable<CustomerModel>> GetCustomersAsync(
         int? transactionsCount, int? accountsCount, DateTime? dateStart, DateTime? dateEnd,
         List<Currency>? currencies, DateTime? birth)
     {
         var customers = await customerRepository.FindManyAsync(x =>
-            transactionsCount == default(int) || x.Transactions.Count >= transactionsCount &&
-            accountsCount == default(int) || x.Accounts.Count >= accountsCount &&
-            dateStart == default(DateTime) || x.Transactions.Where(y => y.Date >= dateStart).Any() &&
-            dateEnd == default(DateTime) || x.Transactions.Where(y => y.Date <= dateEnd).Any() &&
-            currencies == default(List<Currency>) || x.Accounts.Where(y => currencies.Contains(y.Currency)).Any() &&
-            birth == default(DateTime) || x.BirthDate.Day == birth.Value.Day && x.BirthDate.Month == birth.Value.Month);
+            transactionsCount == null || x.Transactions.Count >= transactionsCount &&
+            accountsCount == null || x.Accounts.Count >= accountsCount &&
+            dateStart == null || x.Transactions.Where(y => y.Date >= dateStart).Any() &&
+            dateEnd == null || x.Transactions.Where(y => y.Date <= dateEnd).Any() &&
+            currencies == null || x.Accounts.Where(y => currencies.Contains(y.Currency)).Any() &&
+            birth == null || x.BirthDate.Day == birth.Value.Day && x.BirthDate.Month == birth.Value.Month);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
         

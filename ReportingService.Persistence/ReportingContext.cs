@@ -1,6 +1,6 @@
 ﻿using ReportingService.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
-using ReportingService.Persistence.Entities;
+using ReportingService.Persistence.Entities; 
 
 namespace ReportingService.Persistence;
 
@@ -14,8 +14,8 @@ public class ReportingContext (DbContextOptions<ReportingContext> options) : DbC
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ConfigureAccount();
-        modelBuilder.ConfigureComission();
         modelBuilder.ConfigureCustomer();
         modelBuilder.ConfigureTransaction();
+        modelBuilder.ConfigureComission();
     }
 }

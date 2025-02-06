@@ -166,7 +166,7 @@ public class CustomerServiceTests
 
         _accountRepositoryMock.Verify(x => x.GetByIdAsync(account.Id), Times.Once);
         _customerRepositoryMock.Verify(x => x.FindAsync(x => x.Accounts.Contains(account)), Times.Once);
-        //Assert.Equivalent(customerModel, customerResponse);
+        Assert.Equivalent(customerModel.Accounts, customerResponse.Accounts);
         //ЛИСТЫ НЕ СРАВНИВАЮТСЯ
     }
 
