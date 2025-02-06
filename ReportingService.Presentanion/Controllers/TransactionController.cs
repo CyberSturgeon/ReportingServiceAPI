@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReportingService.Application.Services;
+using ReportingService.Core.Configuration;
 using ReportingService.Presentanion.Models;
 //GET (monthCount transCount) => List<Guid> Ids
 //GET (monthCount money) => List<Guid> Ids
@@ -8,13 +10,28 @@ namespace ReportingService.Presentanion.Controllers;
 
 [Route("api/customers")]
 
-public class TransactionController : Controller
+public class TransactionController(
+    TransactionService transactionService) : Controller
 {
     [HttpGet]
-    public async Task<List<TransactionResponse>> GetTransactionsByCustomerId([FromQuery] Guid customerId, [FromQuery] int? monthCount)
+    public async Task<List<TransactionResponse>> GetAllTransactionsByCustomerId([FromQuery] Guid customerId, [FromQuery] int? monthCount)
     {
+        var transactions = await transactionService.GetAllTransactionsByCustomerId(customerId);
 
-        return new List<TransactionResponse>();
+        var response = transactions
+            .Select(transaction => new TransactionResponse()
+          {
+              Id = transaction.Id,
+              CustomerId = transaction.CustomerId,
+              AccountId = transaction.AccountId,
+              Amount = transaction.Amount,
+              Date = transaction.Date,
+              TransactionType = transaction.TransactionType,
+              Currency = transaction.Currency,
+          })
+          .ToList();
+
+        return response;
     }
 
     [HttpGet("{id}")]
