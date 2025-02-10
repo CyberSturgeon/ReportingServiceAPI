@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
+using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration;
 using ReportingService.Persistence.Entities;
-using ReportingService.Persistence.Repositories;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services;
 
-public class CustomerService (
+public class CustomerService(
         ICustomerRepository customerRepository,
         ITransactionRepository transactionRepository,
         IAccountRepository accountRepository,
-        IMapper mapper)
+        IMapper mapper) : ICustomerService
 {
     public async Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel)
     {
@@ -37,7 +37,7 @@ public class CustomerService (
             throw new EntityNotFoundException($"Customer {id} not found");
 
         var accounts = await accountRepository.FindManyAsync(x => x.CustomerId == id);
-        if(!accounts.Any())
+        if (!accounts.Any())
         {
             throw new EntityNotFoundException($"Customer {id} have no accounts");
         }
@@ -67,7 +67,7 @@ public class CustomerService (
 
         var customer = await customerRepository.FindAsync(x => x.Accounts.Contains(account)) ??
             throw new EntityNotFoundException($"Customer with account {accountId} not found");
-        
+
         var customerModel = mapper.Map<CustomerModel>(customer);
 
         return customerModel;
@@ -110,7 +110,7 @@ public class CustomerService (
             birth == null || x.BirthDate.Day == birth.Value.Day && x.BirthDate.Month == birth.Value.Month);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
-        
+
         return customerModels;
     }
     //НУЖНА ПОМОЩЬ

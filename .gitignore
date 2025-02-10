@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /ReportingService.Presentanion/appsettings.json
 /ReportingService.Presentanion/appsettings.Development.json
+/ReportingService.Presentanion/appsettings.Dev.json
+/ReportingService.Presentanion/appsettings.Dev.json

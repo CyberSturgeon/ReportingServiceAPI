@@ -18,8 +18,8 @@ internal static class CustomerEntityConfiguration
             .IsRequired()
             .ValueGeneratedOnAdd();
 
-        builder.Entity<Customer>().HasIndex(x => x.Login)
-        .IsUnique();
+        //builder.Entity<Customer>().HasIndex(x => x.Login)
+        //.IsUnique();
 
         builder.Entity<Customer>().Property(x => x.FirstName)
         .IsRequired()
@@ -29,9 +29,9 @@ internal static class CustomerEntityConfiguration
         .IsRequired()
         .HasMaxLength(30);
 
-        builder.Entity<Customer>().Property(x => x.Login)
-        .IsRequired()
-        .HasMaxLength(10);
+        //builder.Entity<Customer>().Property(x => x.Login)
+        //.IsRequired()
+        //.HasMaxLength(10);
 
         builder.Entity<Customer>().Property(x => x.Password)
         .IsRequired()
