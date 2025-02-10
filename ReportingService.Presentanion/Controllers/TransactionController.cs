@@ -6,22 +6,19 @@ using ReportingService.Presentanion.Models;
 // 
 namespace ReportingService.Presentanion.Controllers;
 
-[Route("api/customers")]
+[Route("api/transactions")]
 
 public class TransactionController : Controller
 {
-    [HttpGet]
-    public async Task<List<TransactionResponse>> GetTransactionsByCustomerId([FromQuery] Guid customerId, [FromQuery] int? monthCount)
-    {
-
-        return new List<TransactionResponse>();
-    }
-
     [HttpGet("{id}")]
-    public async Task<TransactionResponse> GetTransactionById(Guid id)
+    public async Task<ActionResult<TransactionResponse>> GetTransactionByIdAsync([FromRoute] Guid id)
     {
-        return new TransactionResponse();
+        return Ok(new TransactionResponse());
     }
 
-
+    [HttpGet("{id}/customer")]
+    public async Task<ActionResult<CustomerResponse>> GetCustomerByTransactionIdAsync([FromRoute] Guid id)
+    {
+        return Ok(new CustomerResponse());
+    }
 }

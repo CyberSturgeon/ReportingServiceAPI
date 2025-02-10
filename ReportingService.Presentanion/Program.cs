@@ -1,6 +1,7 @@
 using ReportingService.Application;
 using ReportingService.Persistence.Configuration;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -14,6 +15,8 @@ builder.Configuration
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 builder.Services.ConfigurePersistence(configuration);
@@ -24,8 +27,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 

@@ -1,6 +1,5 @@
-﻿namespace ReportingService.Presentanion.Models
+﻿namespace ReportingService.Presentanion.Models;
+
+public class CustomerResponse
 {
-    public class CustomerResponse
-    {
-    }
 }
