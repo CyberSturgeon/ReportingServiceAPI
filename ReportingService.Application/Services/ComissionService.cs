@@ -2,6 +2,7 @@
 using AutoMapper;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
+using ReportingService.Application.Services.Interfaces;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 
@@ -10,7 +11,7 @@ namespace ReportingService.Application.Services;
 public class ComissionService(
         ITransactionRepository transactionRepository,
         IComissionRepository comissionRepository,
-        IMapper mapper)
+        IMapper mapper) : IComissionService
 {
     public async Task<ComissionModel> GetComissionByIdAsync(Guid id)
     {
@@ -66,11 +67,11 @@ public class ComissionService(
     public async Task<IEnumerable<ComissionModel>> GetComissionsAsync(Guid? customerId, Guid? accountId,
                     DateTime? dateStart, DateTime? dateEnd)
     {
-        var commisions = await comissionRepository.FindManyAsync(x => 
+        var commisions = await comissionRepository.FindManyAsync(x =>
             customerId == null || x.Transaction.CustomerId == customerId &&
             accountId == null || x.Transaction.AccountId == accountId &&
             dateStart == null || x.Transaction.Date >= dateStart &&
-            dateEnd == null || x.Transaction.Date<=dateEnd);
+            dateEnd == null || x.Transaction.Date <= dateEnd);
 
         var comissionModels = mapper.Map<List<ComissionModel>>(commisions.ToList());
 

@@ -1,6 +1,6 @@
 ﻿using ReportingService.Presentanion.Mappings;
 
-namespace ReportingService.Presentanion;
+namespace ReportingService.Presentanion.Configuration;
 
 public static class ServicesConfiguration
 {

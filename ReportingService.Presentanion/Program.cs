@@ -1,6 +1,6 @@
 using ReportingService.Application;
 using ReportingService.Persistence.Configuration;
-using ReportingService.Presentanion;
+using ReportingService.Presentanion.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,5 +39,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.Run();
