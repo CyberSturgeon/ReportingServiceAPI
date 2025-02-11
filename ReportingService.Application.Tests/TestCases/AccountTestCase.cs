@@ -5,7 +5,7 @@ namespace ReportingService.Application.Tests.TestCases;
 
 public static class AccountTestCase
 {
-    public static Account GetAccountEntity(Guid? customerId, List<Transaction>? transactions, Customer? customer)
+    public static Account GetAccountEntity(Guid? customerId = null, List<Transaction>? transactions = null, Customer? customer = null)
     {
         return new Account
         {
@@ -19,7 +19,7 @@ public static class AccountTestCase
         };
     }
 
-    public static AccountModel GetAccountModel(Guid? customerId, List<TransactionModel>? transactions, CustomerModel? customer)
+    public static AccountModel GetAccountModel(Guid? customerId = null, List<TransactionModel>? transactions = null, CustomerModel? customer = null)
     {
         return new AccountModel
         {
