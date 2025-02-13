@@ -20,8 +20,7 @@ public class CustomerController(
     }
 
     [HttpGet("birth-date")]
-    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateTime dateStart,
-                                                                                            [FromQuery] DateTime dateEnd)
+    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateTime dateStart, [FromQuery] DateTime dateEnd)
     {
         var customer = mapper.Map<CustomerResponse>(
                        await customerService.GetCustomersByBirthAsync(dateStart, dateEnd));

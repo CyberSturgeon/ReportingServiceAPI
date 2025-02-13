@@ -1,7 +1,5 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Moq;
-using ReportingService.Core.Configuration;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
 using ReportingService.Application.Models;
@@ -9,9 +7,7 @@ using ReportingService.Application.Services;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 using ReportingService.Application.Tests.TestCases;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore;
 
 namespace ReportingService.Application.Tests;
 
@@ -46,10 +42,28 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async Task GetFullCustomerByIdAsync_ExistsCustomer_GetSucess()
+    public async Task GetFullCustomerByIdAsync_ExistsCustomerNoAccounts_EntityNotFoundExceptionThrown()
     {
         var customer = CustomerTestCase.GetCustomerEntity();
         var id = customer.Id;
+        var msg = $"No Accounts related to Customer {id}";
+        var customerModel = _mapper.Map<Customer>(customer);
+        _customerRepositoryMock.Setup(x => x.FindAsync(x => x.Id == id,
+                     It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>?>()))
+                            .ReturnsAsync(customer);
+
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetFullCustomerByIdAsync(id));
+
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public async Task GetFullCustomerByIdAsync_ExistsCustomer_GetSucess()
+    {
+        var accounts = new List<Account> { AccountTestCase.GetAccountEntity()};
+        var customer = CustomerTestCase.GetCustomerEntity(accounts);
+        var id = customer.Id;
+        accounts[0].CustomerId = id;
         var customerModel = _mapper.Map<Customer>(customer);
         _customerRepositoryMock.Setup(x => x.FindAsync(x => x.Id == id,
                      It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>?>()))

@@ -38,6 +38,11 @@ public class CustomerService(
                         y => y.Include(x => x.Accounts).Include(x => x.Transactions)) ??
             throw new EntityNotFoundException($"Customer {id} not found");
 
+        if(!customer.Accounts.Any())
+        {
+            throw new EntityNotFoundException($"No Accounts related to Customer {id}");
+        }
+
         var customerModel = mapper.Map<CustomerModel>(customer);
 
         return customerModel;
