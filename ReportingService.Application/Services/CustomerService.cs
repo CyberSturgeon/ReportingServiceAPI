@@ -17,6 +17,7 @@ public class CustomerService(
 {
     public async Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel)
     {
+        //var existsCustomer = 
         var customer = await customerRepository.AddAndReturnAsync(mapper.Map<Customer>(customerModel));
 
         return mapper.Map<CustomerModel>(customer);
