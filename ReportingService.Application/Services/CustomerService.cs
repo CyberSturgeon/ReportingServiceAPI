@@ -89,9 +89,9 @@ public class CustomerService(
     {
         var customers = await customerRepository.FindManyAsync(x => filter == null ||
                 filter.TransactionFilter == null ||
-                x.Transactions.Where(y => y.Date > filter.TransactionFilter.DateStart && y.Date < filter.TransactionFilter.DateEnd).ToList().Count > filter.TransactionFilter.TransactionsCount &&
+                x.Transactions.Where(y => y.Date >= filter.TransactionFilter.DateStart && y.Date < filter.TransactionFilter.DateEnd).ToList().Count > filter.TransactionFilter.TransactionsCount &&
                 filter.AccountFilter == null || x.Accounts.Where(y => filter.AccountFilter.Currencies.Contains(y.Currency)).ToList().Count > filter.AccountFilter.AccountsCount &&
-                filter.Birth == null || x.BirthDate.Day == filter.Birth.Value.Day && x.BirthDate.Month == filter.Birth.Value.Month);
+                filter.BdayFilter == null || x.BirthDate>= filter.BdayFilter.DateStart && x.BirthDate < filter.BdayFilter.DateEnd);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
 

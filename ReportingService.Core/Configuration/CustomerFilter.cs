@@ -11,5 +11,5 @@ public class CustomerFilter
 {
     public TransactionFilterForCustomer? TransactionFilter {  get; set; }
     public AccountFilterForCustomer? AccountFilter { get; set; }
-    public DateTime? Birth { get; set; }
+    public BdayFilterForCustomer? BdayFilter { get; set; }
 }
