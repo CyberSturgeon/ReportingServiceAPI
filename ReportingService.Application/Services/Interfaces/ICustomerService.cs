@@ -9,8 +9,8 @@ namespace ReportingService.Application.Services.Interfaces
         Task<CustomerModel> GetCustomerByAccountIdAsync(Guid accountId);
         Task<CustomerModel> GetCustomerByIdAsync(Guid id);
         Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid transactionId);
-        Task<IEnumerable<CustomerModel>> GetCustomersAsync(CustomerFilter? filter);
-        Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime dateStart, DateTime dateEnd);
+        Task<List<CustomerModel>> GetCustomersAsync(CustomerFilter? filter);
+        Task<List<CustomerModel>> GetCustomersByBirthAsync(DateTime dateStart, DateTime dateEnd);
         Task<CustomerModel> GetFullCustomerByIdAsync(Guid id);
     }
 }

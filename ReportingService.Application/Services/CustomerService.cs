@@ -74,7 +74,7 @@ public class CustomerService(
         return customerModel;
     }
 
-    public async Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime dateStart, DateTime dateEnd)
+    public async Task<List<CustomerModel>> GetCustomersByBirthAsync(DateTime dateStart, DateTime dateEnd)
     {
         var customers = await customerRepository.FindManyAsync(x =>
             x.BirthDate.Date >= dateStart.Date &&
@@ -85,7 +85,7 @@ public class CustomerService(
         return customerModels;
     }
 
-    public async Task<IEnumerable<CustomerModel>> GetCustomersAsync(CustomerFilter? filter)
+    public async Task<List<CustomerModel>> GetCustomersAsync(CustomerFilter? filter)
     {
         var customers = await customerRepository.FindManyAsync(x => filter == null ||
                 filter.TransactionFilter == null ||

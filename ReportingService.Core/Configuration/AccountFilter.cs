@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ReportingService.Core.Configuration;
 
-public class AccountFilterForCustomer
+public class AccountFilter
 {
     public required int? AccountsCount { get; set; }
     public required List<Currency>? Currencies { get; set; }

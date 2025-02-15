@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ReportingService.Core.Configuration;
 
-public class BdayFilterForCustomer
+public class BdayFilter
 {
     public required DateTime DateStart {  get; set; }
     public required DateTime DateEnd { get; set; }

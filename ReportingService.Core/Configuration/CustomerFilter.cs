@@ -10,6 +10,6 @@ namespace ReportingService.Core.Configuration;
 public class CustomerFilter
 {
     public TransactionFilterForCustomer? TransactionFilter {  get; set; }
-    public AccountFilterForCustomer? AccountFilter { get; set; }
-    public BdayFilterForCustomer? BdayFilter { get; set; }
+    public AccountFilter? AccountFilter { get; set; }
+    public BdayFilter? BdayFilter { get; set; }
 }
