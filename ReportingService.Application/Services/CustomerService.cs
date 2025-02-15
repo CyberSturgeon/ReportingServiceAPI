@@ -17,7 +17,6 @@ public class CustomerService(
 {
     public async Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel)
     {
-        //var existsCustomer = 
         var customer = await customerRepository.AddAndReturnAsync(mapper.Map<Customer>(customerModel));
 
         return mapper.Map<CustomerModel>(customer);
@@ -98,16 +97,4 @@ public class CustomerService(
 
         return customerModels;
     }
-    //НУЖНА ПОМОЩЬ
-
-    //public async Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime birth)
-    //{
-    //    var customers = await customerRepository.FindManyAsync(x => 
-    //        x.BirthDate.Day == birth.Day &&
-    //        x.BirthDate.Month == birth.Month);
-
-    //    var customerModels = mapper.Map<List<CustomerModel>>(customers);
-
-    //    return customerModels;
-    //}
 }
