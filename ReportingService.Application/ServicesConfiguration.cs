@@ -1,5 +1,4 @@
-﻿
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -15,7 +14,7 @@ public static class ServicesConfiguration
     {
         services.AddAutoMapper(typeof(CustomerMapperProfile).Assembly);
 
-        services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));//HELP
+        services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
 
         services.AddMassTransit(x =>
         {
