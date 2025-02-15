@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using ReportingService.Application.Models;
 using ReportingService.Application.Services;
 using ReportingService.Core.Configuration;
 using ReportingService.Presentanion.Models;
@@ -8,29 +10,20 @@ using ReportingService.Presentanion.Models;
 // 
 namespace ReportingService.Presentanion.Controllers;
 
-[Route("api/customers")]
-
+[Route("api/transactions")]
 public class TransactionController(
-    TransactionService transactionService) : Controller
+    TransactionService transactionService,
+    IMapper mapper) : Controller
 {
-    [HttpGet]
-    public async Task<List<TransactionResponse>> GetAllTransactionsByCustomerId([FromQuery] Guid customerId, [FromQuery] int? monthCount)
+    [HttpPost]
+    public async Task<List<TransactionResponse>> GetAllTransactionsByCustomerId(
+        [FromQuery] Guid customerId, 
+        [FromBody] TransactionSearchRequest request)
     {
-        var transactions = await transactionService.GetAllTransactionsByCustomerId(customerId);
+        var transactions = await transactionService.GetTransactionsByCustomerId(customerId, request.DateFrom, request.DateTo);
 
-        var response = transactions
-            .Select(transaction => new TransactionResponse()
-          {
-              Id = transaction.Id,
-              CustomerId = transaction.CustomerId,
-              AccountId = transaction.AccountId,
-              Amount = transaction.Amount,
-              Date = transaction.Date,
-              TransactionType = transaction.TransactionType,
-              Currency = transaction.Currency,
-          })
-          .ToList();
-
+        var response = mapper.Map<List<TransactionResponse>>(transactions);
+            
         return response;
     }
 
@@ -39,6 +32,4 @@ public class TransactionController(
     {
         return new TransactionResponse();
     }
-
-
 }
