@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services;
+using ReportingService.Core;
 using ReportingService.Core.Configuration;
 using ReportingService.Presentanion.Models;
 //GET (monthCount transCount) => List<Guid> Ids
@@ -16,11 +17,11 @@ public class TransactionController(
     IMapper mapper) : Controller
 {
     [HttpPost]
-    public async Task<List<TransactionResponse>> GetAllTransactionsByCustomerId(
-        [FromQuery] Guid customerId, 
-        [FromBody] TransactionSearchRequest request)
+    public async Task<List<TransactionResponse>> SearchTransactions(
+        [FromBody] Guid customerId, 
+        [FromBody] TransactionSearchFilter request)
     {
-        var transactions = await transactionService.GetTransactionsByCustomerId(customerId, request.DateFrom, request.DateTo);
+        var transactions = await transactionService.SearchTransaction(customerId, request.DateFrom, request.DateTo);
 
         var response = mapper.Map<List<TransactionResponse>>(transactions);
             
