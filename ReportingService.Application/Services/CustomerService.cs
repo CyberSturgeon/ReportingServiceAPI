@@ -3,7 +3,6 @@ using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Core.Configuration;
 using ReportingService.Persistence.Entities;
-using ReportingService.Persistence.Repositories;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services;
@@ -123,14 +122,13 @@ public class CustomerService(
         customerRepository.TransactionalAddRangeAsync(customers);
     }
 
-    //У кого запрашивать текущую базовую валюту?? Бросать экзепшн или удалять плохих клиентов из листа и возвращать только хороших?
     private async Task CheckAccounts(List<CustomerModel> customerModels)
     {
         var customersWithoutAccounts = customerModels.Where(x => !x.Accounts.Where(y => y.Currency == Currency.RUB).Any()).ToList();
 
         if (customersWithoutAccounts.Any())
         {
-            throw new EntityConflictException("Customers with no Accounts in base Currency detected during the adding");
+            throw new EntityConflictException("Customers with no RUB Accounts detected during the adding");
         }
     }
 }

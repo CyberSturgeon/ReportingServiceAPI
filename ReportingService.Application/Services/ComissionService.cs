@@ -74,6 +74,6 @@ public class ComissionService(
 
         var comissionModels = mapper.Map<List<ComissionModel>>(commisions.ToList());
 
-        return comissionModels; //НУЖНА ЛИ ПРОВЕРКА НА СУЩЕСТВОВАНИЕ АККАУНТА И КАСТОМЕРА?
+        return comissionModels;
     }
 }
