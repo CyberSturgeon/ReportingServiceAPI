@@ -1,6 +1,5 @@
 ﻿using ReportingService.Application.Exceptions;
 using System.Net;
-using System;
 
 namespace ReportingService.Presentanion.Configuration;
 
@@ -17,35 +16,35 @@ public class ExceptionMiddleware
         {
             await _next(httpContext);
         }
-        catch (CustomException ex)
+        catch (EntityNotFoundException ex)
         {
-            await HandleCustomExceptionAsync(httpContext, ex);
+            await HandleEntityNotFoundExceptionAsync(httpContext, ex);
         }
         catch (Exception ex)
         {
             await HandleExceptionAsync(httpContext, ex);
         }
     }
-
-    private async Task HandleCustomExceptionAsync(HttpContext httpContext, CustomException ex)
+    private async Task WriteErrorDetailsAsync(HttpContext httpContext, string message)
     {
-        httpContext.Response.ContentType = "application/json";
-        httpContext.Response.StatusCode = (int)ex.StatusCode;
         await httpContext.Response.WriteAsync(new ErrorDetails()
         {
             StatusCode = httpContext.Response.StatusCode,
-            Message = ex.Message
+            Message = message,
         }.ToString());
+    }
+
+    private async Task HandleEntityNotFoundExceptionAsync(HttpContext httpContext, Exception ex)
+    {
+        httpContext.Response.ContentType = "application/json";
+        httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+        await WriteErrorDetailsAsync(httpContext, ex.Message);
     }
 
     private async Task HandleExceptionAsync(HttpContext httpContext, Exception ex)
     {
         httpContext.Response.ContentType = "application/json";
         httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        await httpContext.Response.WriteAsync(new ErrorDetails()
-        {
-            StatusCode = httpContext.Response.StatusCode,
-            Message = "Strange shit!"
-        }.ToString());
+        await WriteErrorDetailsAsync(httpContext, "Strange shit!");
     }
 }
