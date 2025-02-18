@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
@@ -97,4 +97,16 @@ public class CustomerService(
 
         return customerModels;
     }
+    //НУЖНА ПОМОЩЬ
+
+    //public async Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime birth)
+    //{
+    //    var customers = await customerRepository.FindManyAsync(x => 
+    //        x.BirthDate.Day == birth.Day &&
+    //        x.BirthDate.Month == birth.Month);
+
+    //    var customerModels = mapper.Map<List<CustomerModel>>(customers);
+
+    //    return customerModels;
+    //}
 }
