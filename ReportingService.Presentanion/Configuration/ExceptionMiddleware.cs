@@ -17,9 +17,9 @@ public class ExceptionMiddleware
         {
             await _next(httpContext);
         }
-        catch (EntityNotFoundException ex)
+        catch (CustomException ex)
         {
-            await HandleEntityNotFoundExceptionAsync(httpContext, ex);
+            await HandleCustomExceptionAsync(httpContext, ex);
         }
         catch (Exception ex)
         {
@@ -27,11 +27,10 @@ public class ExceptionMiddleware
         }
     }
 
-    private async Task HandleEntityNotFoundExceptionAsync(HttpContext httpContext,
-                                                        Exception ex)
+    private async Task HandleCustomExceptionAsync(HttpContext httpContext, CustomException ex)
     {
         httpContext.Response.ContentType = "application/json";
-        httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+        httpContext.Response.StatusCode = (int)ex.StatusCode;
         await httpContext.Response.WriteAsync(new ErrorDetails()
         {
             StatusCode = httpContext.Response.StatusCode,
@@ -42,7 +41,7 @@ public class ExceptionMiddleware
     private async Task HandleExceptionAsync(HttpContext httpContext, Exception ex)
     {
         httpContext.Response.ContentType = "application/json";
-        httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+        httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         await httpContext.Response.WriteAsync(new ErrorDetails()
         {
             StatusCode = httpContext.Response.StatusCode,
