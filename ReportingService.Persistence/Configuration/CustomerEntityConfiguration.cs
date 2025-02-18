@@ -8,6 +8,12 @@ internal static class CustomerEntityConfiguration
 {
     internal static void ConfigureCustomer(this ModelBuilder builder)
     {
+        builder.Entity<Customer>().HasKey(p => p.Id);
+
+        builder.Entity<Customer>().Property(p => p.Id)
+        .IsRequired()
+        .ValueGeneratedOnAdd();
+
         builder.Entity<Customer>().HasMany(x => x.Accounts)
                 .WithOne(y => y.Customer)
                 .HasForeignKey(x => x.CustomerId);
@@ -18,9 +24,6 @@ internal static class CustomerEntityConfiguration
             .IsRequired()
             .ValueGeneratedOnAdd();
 
-        //builder.Entity<Customer>().HasIndex(x => x.Login)
-        //.IsUnique();
-
         builder.Entity<Customer>().Property(x => x.FirstName)
         .IsRequired()
         .HasMaxLength(30);
@@ -29,9 +32,9 @@ internal static class CustomerEntityConfiguration
         .IsRequired()
         .HasMaxLength(30);
 
-        //builder.Entity<Customer>().Property(x => x.Login)
-        //.IsRequired()
-        //.HasMaxLength(10);
+        builder.Entity<Customer>().Property(p => p.Email)
+        .IsRequired()
+        .HasMaxLength(50);
 
         builder.Entity<Customer>().Property(x => x.Password)
         .IsRequired()
@@ -40,8 +43,13 @@ internal static class CustomerEntityConfiguration
         builder.Entity<Customer>().Property(x => x.Role)
         .IsRequired();
 
-        builder.Entity<Customer>().Property(x => x.IsDeactivated)
-        .IsRequired();
+        builder.Entity<Customer>().Property(p => p.CustomVipDueDate)
+       .IsRequired(false)
+       .HasColumnType("timestamp without time zone");
+
+        builder.Entity<Customer>().Property(p => p.IsDeactivated)
+        .IsRequired()
+        .HasDefaultValue(false);
 
         builder.Entity<Customer>().Property<DateTime>(x => x.BirthDate);
     }

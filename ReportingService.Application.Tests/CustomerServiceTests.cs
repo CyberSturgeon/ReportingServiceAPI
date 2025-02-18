@@ -129,8 +129,7 @@ public class CustomerServiceTests
         var account = AccountTestCase.GetAccountEntity(customer.Id, null, customer);
         customer.Accounts.Add(account);
         _accountRepositoryMock.Setup(x => x.GetByIdAsync(account.Id)).ReturnsAsync(account);
-        _customerRepositoryMock.Setup(x => x.FindAsync(x => x.Accounts.Contains(account),
-            It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>?>()))
+        _customerRepositoryMock.Setup(x => x.FindAsync(x => x.Accounts.Contains(account), null))
             .ReturnsAsync(customer);
         var customerModel = _mapper.Map<CustomerModel>(customer);
         
@@ -170,7 +169,7 @@ public class CustomerServiceTests
         var transaction = TransactionTestCase.GetTransactionEntity(null, customer.Id);
         customer.Transactions.Add(transaction);
         _customerRepositoryMock.Setup(x => x.FindAsync(x => x.Transactions.Contains(transaction),
-            It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>?>()))
+            null))
             .ReturnsAsync(customer);
         _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
         var customerModel = _mapper.Map<CustomerModel>(customer);
@@ -179,7 +178,7 @@ public class CustomerServiceTests
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
         _customerRepositoryMock.Verify(x => x.FindAsync(x => x.Transactions.Contains(transaction),
-            It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>?>()), Times.Once);
+            null), Times.Once);
         Assert.Equivalent(customerModel, customerResponse);
     }
 

@@ -84,7 +84,7 @@ public class ComissionServiceTests
         var comission = ComissionTestCase.GetComissionEntity(null, null);
         _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
         _comissionRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>(),
-             It.IsAny<Func<IQueryable<Comission>, IIncludableQueryable<Comission, object>>?>()))
+             null))
             .ReturnsAsync(comission);
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
@@ -92,7 +92,7 @@ public class ComissionServiceTests
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
         _comissionRepositoryMock.Verify(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>(),
-            It.IsAny<Func<IQueryable<Comission>, IIncludableQueryable<Comission, object>>?>()), Times.Once);
+            null), Times.Once);
         Assert.Equivalent(comissionModel, comissionResponse);
     }
 
