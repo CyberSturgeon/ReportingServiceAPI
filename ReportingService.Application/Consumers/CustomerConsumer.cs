@@ -2,7 +2,7 @@
 using Integration.Messages;
 using MassTransit;
 using ReportingService.Application.Models;
-using ReportingService.Application.Services;
+using ReportingService.Application.Services.Interfaces;
 
 
 namespace ReportingService.Application.Consumers

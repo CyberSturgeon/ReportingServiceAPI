@@ -21,7 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 builder.Services.ConfigurePersistence(configuration);
-builder.Services.ConfigureApplication();
+builder.Services.ConfigureApplication(configuration);
 builder.Services.ConfigurePresentation();
 
 var app = builder.Build();

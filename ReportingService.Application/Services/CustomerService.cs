@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
+using ReportingService.Core.Configuration;
 using ReportingService.Core.Configuration.Filters;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
@@ -97,16 +98,23 @@ public class CustomerService(
 
         return customerModels;
     }
-    //НУЖНА ПОМОЩЬ
 
-    //public async Task<IEnumerable<CustomerModel>> GetCustomersByBirthAsync(DateTime birth)
-    //{
-    //    var customers = await customerRepository.FindManyAsync(x => 
-    //        x.BirthDate.Day == birth.Day &&
-    //        x.BirthDate.Month == birth.Month);
+    public async Task TransactionalAddCustomersAsync(List<CustomerModel> customerModels)
+    {
+        CheckAccounts(customerModels);
 
-    //    var customerModels = mapper.Map<List<CustomerModel>>(customers);
+        var customers = mapper.Map<List<Customer>>(customerModels);
 
-    //    return customerModels;
-    //}
+        customerRepository.TransactionalAddRangeAsync(customers);
+    }
+
+    private async Task CheckAccounts(List<CustomerModel> customerModels)
+    {
+        var customersWithoutAccounts = customerModels.Where(x => !x.Accounts.Where(y => y.Currency == Currency.RUB).Any()).ToList();
+
+        if (customersWithoutAccounts.Any())
+        {
+            throw new EntityConflictException("Customers with no RUB Accounts detected during the adding");
+        }
+    }
 }
