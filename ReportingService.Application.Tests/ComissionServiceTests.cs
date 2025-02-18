@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
@@ -82,14 +83,16 @@ public class ComissionServiceTests
         var transaction = TransactionTestCase.GetTransactionEntity(null, null);
         var comission = ComissionTestCase.GetComissionEntity(null, null);
         _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
-        _comissionRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>()))
+        _comissionRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>(),
+             null))
             .ReturnsAsync(comission);
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
         var comissionResponse = await _sut.GetComissionByTransactionIdAsync(transaction.Id);
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
-        _comissionRepositoryMock.Verify(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>()), Times.Once);
+        _comissionRepositoryMock.Verify(x => x.FindAsync(It.IsAny<Expression<Func<Comission, bool>>>(),
+            null), Times.Once);
         Assert.Equivalent(comissionModel, comissionResponse);
     }
 
