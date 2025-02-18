@@ -15,10 +15,10 @@ internal static class ComissionEntityConfiguration
         builder.Entity<Comission>().Property(x => x.Income)
             .IsRequired();
 
-        //builder.Entity<Comission>().Property(x => x.Transaction);
-            //.IsRequired();
+        builder.Entity<Comission>().Property(x => x.Transaction)
+            .IsRequired();
 
-        //builder.Entity<Comission>().HasOne(x => x.Transaction);
+        builder.Entity<Comission>().HasOne(x => x.Transaction);
 
         builder.Entity<Comission>().Property<decimal>(x => x.Income);
     }

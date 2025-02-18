@@ -1,21 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration;
 using ReportingService.Presentanion.Models;
 
 namespace ReportingService.Presentanion.Controllers;
 [Route("api/customers")]
-public class CustomerController : Controller
+public class CustomerController(
+    ICustomerService customerService,
+    IMapper mapper) : Controller
 {
     [HttpGet("{id}")]
     public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync([FromRoute] Guid id)
     {
-        return Ok(new CustomerResponse());
+        var customer = mapper.Map<CustomerResponse>(
+                       await customerService.GetCustomerByIdAsync(id));
+
+        return Ok(customer);
     }
 
     [HttpGet("birth-date")]
-    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateTime birth)
+    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateTime dateStart, [FromQuery] DateTime dateEnd)
     {
-        return Ok(new List<CustomerResponse>());
+        var customer = mapper.Map<CustomerResponse>(
+                       await customerService.GetCustomersByBirthAsync(dateStart, dateEnd));
+        return Ok(customer);
     }
 
     [HttpGet("{id}/transactions")]
@@ -26,7 +35,7 @@ public class CustomerController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByFilterdAsync([FromQuery] CustomerFilterRequest request)
+    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByFilterAsync([FromQuery] CustomerFilterRequest request)
     {
         return Ok(new List<CustomerResponse>());
     }
