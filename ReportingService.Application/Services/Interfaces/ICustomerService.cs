@@ -1,5 +1,5 @@
 ﻿using ReportingService.Application.Models;
-using ReportingService.Core.Configuration;
+using ReportingService.Core.Configuration.Filters;
 
 namespace ReportingService.Application.Services.Interfaces
 {

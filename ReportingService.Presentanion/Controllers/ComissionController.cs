@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ReportingService.Application.Services.Interfaces;
-using ReportingService.Core.Configuration;
+using ReportingService.Core.Configuration.Filters;
 using ReportingService.Presentanion.Models;
 
 namespace ReportingService.Presentanion.Controllers;
