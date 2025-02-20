@@ -1,5 +1,5 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
@@ -12,7 +12,7 @@ namespace ReportingService.Application.Services;
 public class ComissionService(
         ITransactionRepository transactionRepository,
         IComissionRepository comissionRepository,
-        IMapper mapper) : IComissionService
+        IMapper mapper, ILogger<ComissionService> logger) : IComissionService
 {
     public async Task<ComissionModel> GetComissionByIdAsync(Guid id)
     {

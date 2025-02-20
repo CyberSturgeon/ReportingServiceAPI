@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
@@ -14,7 +15,7 @@ public class CustomerService(
         ICustomerRepository customerRepository,
         ITransactionRepository transactionRepository,
         IAccountRepository accountRepository,
-        IMapper mapper) : ICustomerService
+        IMapper mapper, ILogger<CustomerService> logger) : ICustomerService
 {
     public async Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel)
     {
@@ -78,8 +79,8 @@ public class CustomerService(
     public async Task<List<CustomerModel>> GetCustomersByBirthAsync(DateTime dateStart, DateTime dateEnd)
     {
         var customers = await customerRepository.FindManyAsync(x =>
-            x.BirthDate.Date >= dateStart.Date &&
-            x.BirthDate.Date <= dateEnd);
+            x.BirthDate.Day >= dateStart.Day && x.BirthDate.Month == dateStart.Month &&
+            x.BirthDate.Day <= dateEnd.Day && x.BirthDate.Month == dateEnd.Month);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
 
