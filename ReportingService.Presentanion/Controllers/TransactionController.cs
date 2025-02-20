@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services;
@@ -21,16 +21,16 @@ public class TransactionController(
         [FromBody] Guid customerId, 
         [FromBody] TransactionSearchFilter request)
     {
-        var transactions = await transactionService.SearchTransaction(customerId, request.DateFrom, request.DateTo);
+        var transactions = await transactionService.SearchTransaction(customerId, request);
 
         var response = mapper.Map<List<TransactionResponse>>(transactions);
             
         return response;
     }
 
-    [HttpGet("{id}")]
-    public async Task<TransactionResponse> GetTransactionById(Guid id)
+    [HttpGet("{id}/customer")]
+    public async Task<ActionResult<CustomerResponse>> GetCustomerByTransactionIdAsync([FromRoute] Guid id)
     {
-        return new TransactionResponse();
+        return Ok(new CustomerResponse());
     }
 }

@@ -5,7 +5,7 @@ namespace ReportingService.Application.Tests.TestCases;
 
 public static class CustomerTestCase
 {
-    public static Customer GetCustomerEntity(List<Account>? accounts, List<Transaction> transactions)
+    public static Customer GetCustomerEntity(List<Account>? accounts = null, List<Transaction> transactions = null)
     {
         return new Customer
         {
@@ -13,18 +13,19 @@ public static class CustomerTestCase
             Role = Core.Configuration.Role.Regular,
             Phone = "test",
             Address = "test",
-            Login = "test",
+            Email = "test",
             Password = "test",
             BirthDate = DateTime.Now,
             FirstName = "test",
             LastName = "test",
             Accounts = accounts ?? [],
+            CustomVipDueDate = null,
             IsDeactivated = false,
             Transactions = transactions ?? [],
         };
     }
 
-    public static CustomerModel GetCustomerModel(List<AccountModel>? accountModels, List<TransactionModel> transactionModels)
+    public static CustomerModel GetCustomerModel(List<AccountModel>? accountModels = null, List<TransactionModel> transactionModels = null)
     {
         return new CustomerModel
         {
@@ -32,8 +33,9 @@ public static class CustomerTestCase
             Role = Core.Configuration.Role.Regular,
             Phone = "test",
             Address = "test",
-            Login = "test",
+            Email = "test",
             Password = "test",
+            CustomVipDueDate = null,
             BirthDate = DateTime.Now,
             FirstName = "test",
             LastName = "test",

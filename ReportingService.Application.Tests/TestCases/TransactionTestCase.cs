@@ -5,7 +5,7 @@ namespace ReportingService.Application.Tests.TestCases;
 
 public static class TransactionTestCase
 {
-    public static Transaction GetTransactionEntity(Guid? accountId, Guid? customerId)
+    public static Transaction GetTransactionEntity(Guid? accountId = null, Guid? customerId = null)
     {
         return new Transaction
         {
@@ -20,7 +20,7 @@ public static class TransactionTestCase
         };
     }
 
-    public static TransactionModel GetTransactionModel(Guid? accountId, Guid? customerId)
+    public static TransactionModel GetTransactionModel(Guid? accountId = null, Guid? customerId = null)
     {
         return new TransactionModel
         {
