@@ -19,25 +19,25 @@ public static class ServicesConfiguration
 
         services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
 
-        services.AddMassTransit(x =>
-        {
-            x.AddConsumer<CustomerConsumer>();
+        //services.AddMassTransit(x =>
+        //{
+        //    x.AddConsumer<CustomerConsumer>();
 
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
+        //    x.UsingRabbitMq((context, cfg) =>
+        //    {
+        //        var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
 
-                cfg.Host(settings.Host, settings.VirtualHost, h =>
-                {
-                    h.Username(settings.Username);
-                    h.Password(settings.Password);
-                });
+        //        cfg.Host(settings.Host, settings.VirtualHost, h =>
+        //        {
+        //            h.Username(settings.Username);
+        //            h.Password(settings.Password);
+        //        });
 
-                cfg.ReceiveEndpoint(settings.QueueName, e =>
-                {
-                    e.ConfigureConsumer<CustomerConsumer>(context);
-                });
-            });
-        });
+        //        cfg.ReceiveEndpoint(settings.QueueName, e =>
+        //        {
+        //            e.ConfigureConsumer<CustomerConsumer>(context);
+        //        });
+        //    });
+        //});
     }
 }
