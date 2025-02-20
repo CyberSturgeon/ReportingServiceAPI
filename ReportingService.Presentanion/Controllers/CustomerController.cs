@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration;
+using ReportingService.Core.Configuration.Filters;
 using ReportingService.Presentanion.Models;
 
 namespace ReportingService.Presentanion.Controllers;
@@ -20,10 +21,10 @@ public class CustomerController(
     }
 
     [HttpGet("birth-date")]
-    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateTime dateStart, [FromQuery] DateTime dateEnd)
+    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateFilter dates)
     {
         var customer = mapper.Map<CustomerResponse>(
-                       await customerService.GetCustomersByBirthAsync(dateStart, dateEnd));
+                       await customerService.GetCustomersByBirthAsync(dates));
         return Ok(customer);
     }
 
