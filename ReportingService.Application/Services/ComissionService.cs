@@ -20,7 +20,7 @@ public class ComissionService(
         var comission = await comissionRepository.GetByIdAsync(id) ??
             throw new EntityNotFoundException($"Comission {id} not found");
         var comissionModel = mapper.Map<ComissionModel>(comission);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation(" ");
         return comissionModel;
     }
 
@@ -31,7 +31,7 @@ public class ComissionService(
             throw new EntityNotFoundException($"Transaction {comissionModel.TransactionId} related to comission not found");
 
         var comission = await comissionRepository.AddAndReturnAsync(mapper.Map<Comission>(comissionModel));
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return mapper.Map<ComissionModel>(comission);
     }
 
@@ -53,7 +53,7 @@ public class ComissionService(
 
         logger.LogInformation($"After transaction id check CREATE {comissionModels.Count} comissions");
         await comissionRepository.TransactionalAddRangeAsync(mapper.Map<List<Comission>>(comissionModels));
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
     }
 
     public async Task<ComissionModel> GetComissionByTransactionIdAsync(Guid transactionId)
@@ -67,7 +67,7 @@ public class ComissionService(
                 throw new EntityNotFoundException($"Comssion with transaction {transactionId} not found");
 
         var comissionModel = mapper.Map<ComissionModel>(comission);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return comissionModel;
     }
 
@@ -81,7 +81,7 @@ public class ComissionService(
             date == null || x.Transaction.Date>= date.DateStart && x.Transaction.Date < date.DateEnd);
 
         var comissionModels = mapper.Map<List<ComissionModel>>(commisions.ToList());
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return comissionModels;
     }
 }

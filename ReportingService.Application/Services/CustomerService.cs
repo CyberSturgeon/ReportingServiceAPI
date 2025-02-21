@@ -21,7 +21,7 @@ public class CustomerService(
     {
         logger.LogInformation($"CREATE customer {HideEmail(customerModel.Email)}");
         var customer = await customerRepository.AddAndReturnAsync(mapper.Map<Customer>(customerModel));
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return mapper.Map<CustomerModel>(customer);
     }
 
@@ -32,7 +32,7 @@ public class CustomerService(
             throw new EntityNotFoundException($"Customer {id} not found");
 
         var customerModel = mapper.Map<CustomerModel>(customer);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return customerModel;
     }
 
@@ -49,7 +49,7 @@ public class CustomerService(
         }
 
         var customerModel = mapper.Map<CustomerModel>(customer);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("                     ");
         return customerModel;
     }
 
@@ -63,7 +63,7 @@ public class CustomerService(
             throw new EntityNotFoundException($"Customer with account {accountId} not found");
 
         var customerModel = mapper.Map<CustomerModel>(customer);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return customerModel;
     }
 
@@ -77,7 +77,7 @@ public class CustomerService(
             throw new EntityNotFoundException($"Customer with transaction {transactionId} not found");
 
         var customerModel = mapper.Map<CustomerModel>(customer);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return customerModel;
     }
 
@@ -89,7 +89,7 @@ public class CustomerService(
             x.BirthDate.Day <= dates.DateEnd.Day && x.BirthDate.Month == dates.DateEnd.Month);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return customerModels;
     }
 
@@ -106,7 +106,7 @@ public class CustomerService(
                 filter.BdayFilter == null || x.BirthDate>= filter.BdayFilter.DateStart && x.BirthDate < filter.BdayFilter.DateEnd);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
         return customerModels;
     }
 
@@ -117,7 +117,7 @@ public class CustomerService(
 
         var customers = mapper.Map<List<Customer>>(customerModels);
         customerRepository.TransactionalAddRangeAsync(customers);
-        logger.LogInformation("SUCESS");
+        logger.LogInformation("SUCCESS");
     }
 
     private async Task CheckAccounts(List<CustomerModel> customerModels)
