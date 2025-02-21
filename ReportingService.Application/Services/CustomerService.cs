@@ -19,7 +19,7 @@ public class CustomerService(
 {
     public async Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel)
     {
-        logger.LogInformation($"CREATE customer {HideEmail(customerModel.Email)}");
+        logger.LogInformation($"CREATE customer {LogHelper.HideEmail(customerModel.Email)}");
         var customer = await customerRepository.AddAndReturnAsync(mapper.Map<Customer>(customerModel));
         logger.LogInformation("SUCCESS");
         return mapper.Map<CustomerModel>(customer);
@@ -49,7 +49,7 @@ public class CustomerService(
         }
 
         var customerModel = mapper.Map<CustomerModel>(customer);
-        logger.LogInformation("                     ");
+        logger.LogInformation("SUCCESS");
         return customerModel;
     }
 
@@ -130,17 +130,5 @@ public class CustomerService(
             throw new EntityConflictException("Customers with no RUB Accounts detected during the adding");
         }
         logger.LogInformation($"SUCESS passed {customersWithoutAccounts.Count} customers");
-    }
-
-    private string HideEmail(string email)
-    {
-        var atIndex = email.IndexOf('@');
-        if (atIndex <= 1)
-        {
-            return email;
-        }
-
-        var maskedEmail = email.Substring(0, 1) + new string('*', atIndex - 1) + email.Substring(atIndex);
-        return maskedEmail;
     }
 }
