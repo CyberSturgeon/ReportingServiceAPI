@@ -8,6 +8,8 @@ using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 using ReportingService.Application.Tests.TestCases;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ReportingService.Application.Tests;
 
@@ -28,6 +30,46 @@ public class CustomerServiceTests
         _mapper = new(MapperHelper.ConfigureMapper());
 
         _sut = new(_customerRepositoryMock.Object, _transactionRepositoryMock.Object, _accountRepositoryMock.Object, _mapper);
+    }
+
+    [Theory]
+    [InlineData(3, 4, 4, 4, 3)]
+    [InlineData(7, 14, 8, 21, 3)]
+    [InlineData(1, 3, 12, 1, 13)]
+    [InlineData(6, 4, 8, 20, 3)]
+    public async Task GetCustomersByBirthAsync_ReturnsCustomersInRange(int startMonth,
+        int startDay, int endMonth, int endDay, int expectedCount)
+    {
+        var customers = new List<Customer>
+        {
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 1, 10) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 1, 15) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 2, 3) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(2026, 8, 21) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1839, 7, 4) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1488, 7, 20) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1234, 7, 14) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 3, 10) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 3, 15) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 3, 3) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 4, 10) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 4, 15) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 4, 3) },
+        };
+
+        var mockSet = FakeDbSet.GetMockCustomerDbSet(customers);
+        var mockContext = new Mock<DbContext>();
+        mockContext.Setup(c => c.Set<Customer>()).Returns(mockSet.Object);
+
+        _customerRepositoryMock.Setup(r => r.FindManyAsync(It.IsAny<Expression<Func<Customer, bool>>>()))
+                .ReturnsAsync((Expression<Func<Customer, bool>> predicate) => customers.Where(predicate.Compile()).ToList());
+
+        var dateStart = new DateTime(DateTime.Now.Year, startMonth, startDay);
+        var dateEnd = new DateTime(DateTime.Now.Year, endMonth, endDay);
+
+        var result = await _sut.GetCustomersByBirthAsync(dateStart, dateEnd);
+
+        Assert.Equal(expectedCount, result.Count);
     }
 
     [Fact]

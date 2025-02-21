@@ -78,8 +78,9 @@ public class CustomerService(
     public async Task<List<CustomerModel>> GetCustomersByBirthAsync(DateTime dateStart, DateTime dateEnd)
     {
         var customers = await customerRepository.FindManyAsync(x =>
-            x.BirthDate.Date >= dateStart.Date &&
-            x.BirthDate.Date <= dateEnd);
+            (x.BirthDate.Month == dateStart.Month && x.BirthDate.Day >= dateStart.Day) ||
+            (x.BirthDate.Month > dateStart.Month && x.BirthDate.Month < dateEnd.Month) ||
+            (x.BirthDate.Month == dateEnd.Month && x.BirthDate.Day <= dateEnd.Day));
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
 
@@ -90,8 +91,10 @@ public class CustomerService(
     {
         var customers = await customerRepository.FindManyAsync(x => filter == null ||
                 filter.TransactionFilter == null ||
-                x.Transactions.Where(y => y.Date >= filter.TransactionFilter.DateStart && y.Date < filter.TransactionFilter.DateEnd).ToList().Count > filter.TransactionFilter.TransactionsCount &&
-                filter.AccountFilter == null || x.Accounts.Where(y => filter.AccountFilter.Currencies.Contains(y.Currency)).ToList().Count > filter.AccountFilter.AccountsCount &&
+                x.Transactions.Where(y => y.Date >= filter.TransactionFilter.DateStart &&
+                y.Date < filter.TransactionFilter.DateEnd).ToList().Count > filter.TransactionFilter.TransactionsCount &&
+                filter.AccountFilter == null ||
+                x.Accounts.Where(y => filter.AccountFilter.Currencies.Contains(y.Currency)).ToList().Count > filter.AccountFilter.AccountsCount &&
                 filter.BdayFilter == null || x.BirthDate>= filter.BdayFilter.DateStart && x.BirthDate < filter.BdayFilter.DateEnd);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
