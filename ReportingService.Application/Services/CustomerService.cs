@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MYPBackendMicroserviceIntegrations.Enums;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
@@ -120,6 +121,13 @@ public class CustomerService(
 
         var customers = mapper.Map<List<Customer>>(customerModels);
         customerRepository.TransactionalAddRangeAsync(customers);
+        logger.LogInformation("SUCCESS");
+    }
+
+    public async Task BatchUpdateRoleAync(List<Guid> customerIds)
+    {
+        logger.LogInformation($"UPDATE role for {customerIds.Count} customers ");
+        await customerRepository.BatchUpdateRoleAsync(customerIds);
         logger.LogInformation("SUCCESS");
     }
 

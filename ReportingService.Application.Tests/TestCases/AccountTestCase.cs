@@ -1,4 +1,5 @@
-﻿using ReportingService.Application.Models;
+﻿using MYPBackendMicroserviceIntegrations.Enums;
+using ReportingService.Application.Models;
 using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Application.Tests.TestCases;
@@ -13,7 +14,7 @@ public static class AccountTestCase
             CustomerId = customerId ?? Guid.NewGuid(),
             DateCreated = DateTime.UtcNow,
             Status = true,
-            Currency = Core.Configuration.Currency.RUB,
+            Currency = Currency.RUB,
             Transactions = transactions ?? [],
             Customer = customer ?? new(),
         };
@@ -27,7 +28,7 @@ public static class AccountTestCase
             CustomerId = customerId ?? Guid.NewGuid(),
             DateCreated = DateTime.UtcNow,
             Status = true,
-            Currency = Core.Configuration.Currency.RUB,
+            Currency = Currency.RUB,
             Transactions = transactions ?? [],
             Customer = customer ?? new(),
         };

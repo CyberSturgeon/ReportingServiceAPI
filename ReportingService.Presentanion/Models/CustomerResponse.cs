@@ -15,5 +15,5 @@ public class CustomerResponse
     public string LastName { get; set; }
     //public ICollection<AccountModel> Accounts { get; set; } = [];
     public bool IsDeactivated { get; set; }
-    //public ICollection<TransactionModel> Transactions { get; set; } = [];
+    public ICollection<TransactionResponse> Transactions { get; set; } = [];
 }
