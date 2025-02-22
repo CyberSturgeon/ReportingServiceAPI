@@ -5,10 +5,12 @@ namespace ReportingService.Presentanion.Configuration;
 
 public class ExceptionMiddleware
 {
+    private readonly ILogger<ExceptionMiddleware> _logger;
     private readonly RequestDelegate _next;
-    public ExceptionMiddleware(RequestDelegate next)
+    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
     public async Task InvokeAsync(HttpContext httpContext)
     {
@@ -27,6 +29,7 @@ public class ExceptionMiddleware
     }
     private async Task WriteErrorDetailsAsync(HttpContext httpContext, string message)
     {
+        _logger.LogError($"ERROR {message}");
         await httpContext.Response.WriteAsync(new ErrorDetails()
         {
             StatusCode = httpContext.Response.StatusCode,

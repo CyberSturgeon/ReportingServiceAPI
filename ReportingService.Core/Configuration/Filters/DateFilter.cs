@@ -2,6 +2,6 @@
 
 public class DateFilter
 {
-    public required DateTime DateStart { get; set; }
-    public required DateTime DateEnd { get; set; }
+    public DateTime DateStart { get; set; }
+    public DateTime DateEnd { get; set; }
 }
