@@ -10,6 +10,9 @@ using ReportingService.Application.Tests.TestCases;
 using Microsoft.EntityFrameworkCore.Query;
 using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using ReportingService.Core.Configuration.Filters;
 
 namespace ReportingService.Application.Tests;
 
@@ -69,8 +72,9 @@ public class CustomerServiceTests
 
         var dateStart = new DateTime(DateTime.Now.Year, startMonth, startDay);
         var dateEnd = new DateTime(DateTime.Now.Year, endMonth, endDay);
+        var dates = new DateFilter { DateStart = dateStart, DateEnd = dateEnd };
 
-        var result = await _sut.GetCustomersByBirthAsync(dateStart, dateEnd);
+        var result = await _sut.GetCustomersByBirthAsync(dates);
 
         Assert.Equal(expectedCount, result.Count);
     }

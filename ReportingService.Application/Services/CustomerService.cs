@@ -85,9 +85,9 @@ public class CustomerService(
     {
         logger.LogInformation($"GET customers by birth {dates.DateStart} - {dates.DateEnd}");
         var customers = await customerRepository.FindManyAsync(x =>
-            (x.BirthDate.Month == dateStart.Month && x.BirthDate.Day >= dateStart.Day) ||
-            (x.BirthDate.Month > dateStart.Month && x.BirthDate.Month < dateEnd.Month) ||
-            (x.BirthDate.Month == dateEnd.Month && x.BirthDate.Day <= dateEnd.Day));
+            (x.BirthDate.Month == dates.DateStart.Month && x.BirthDate.Day >= dates.DateStart.Day) ||
+            (x.BirthDate.Month > dates.DateStart.Month && x.BirthDate.Month < dates.DateEnd.Month) ||
+            (x.BirthDate.Month == dates.DateEnd.Month && x.BirthDate.Day <= dates.DateEnd.Day));
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
         logger.LogInformation("SUCCESS");
