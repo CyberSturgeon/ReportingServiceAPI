@@ -17,7 +17,7 @@ public static class ServicesConfiguration
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddAutoMapper(typeof(CustomerMapperProfile).Assembly);
 
-        services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
+        //services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
 
         //services.AddMassTransit(x =>
         //{

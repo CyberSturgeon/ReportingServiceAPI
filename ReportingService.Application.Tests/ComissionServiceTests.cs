@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
@@ -18,14 +19,16 @@ public class ComissionServiceTests
     private readonly Mock<ITransactionRepository> _transactionRepositoryMock;
     private readonly Mapper _mapper;
     private readonly ComissionService _sut;
+    private readonly Mock<ILogger<ComissionService>> _comissionServiceLoggerMock;
 
     public ComissionServiceTests()
     {
         _comissionRepositoryMock = new();
         _transactionRepositoryMock = new();
         _mapper = new(MapperHelper.ConfigureMapper());
-
-        _sut = new(_transactionRepositoryMock.Object, _comissionRepositoryMock.Object, _mapper);
+        _comissionServiceLoggerMock = new();
+        _sut = new(_transactionRepositoryMock.Object, _comissionRepositoryMock.Object,
+            _mapper, _comissionServiceLoggerMock.Object);
     }
 
     [Fact]

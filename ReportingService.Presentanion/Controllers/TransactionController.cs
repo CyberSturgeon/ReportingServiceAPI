@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using ReportingService.Application.Models;
+using ReportingService.Application.Services;
+using ReportingService.Core;
+using ReportingService.Core.Configuration;
 using ReportingService.Presentanion.Models;
 //GET (monthCount transCount) => List<Guid> Ids
 //GET (monthCount money) => List<Guid> Ids
@@ -7,13 +12,20 @@ using ReportingService.Presentanion.Models;
 namespace ReportingService.Presentanion.Controllers;
 
 [Route("api/transactions")]
-
-public class TransactionController : Controller
+public class TransactionController(
+    TransactionService transactionService,
+    IMapper mapper) : Controller
 {
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TransactionResponse>> GetTransactionByIdAsync([FromRoute] Guid id)
+    [HttpPost]
+    public async Task<List<TransactionResponse>> SearchTransactions(
+        [FromBody] Guid customerId, 
+        [FromBody] TransactionSearchFilter request)
     {
-        return Ok(new TransactionResponse());
+        var transactions = await transactionService.SearchTransaction(customerId, request);
+
+        var response = mapper.Map<List<TransactionResponse>>(transactions);
+            
+        return response;
     }
 
     [HttpGet("{id}/customer")]

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Moq;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
@@ -8,8 +8,8 @@ using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 using ReportingService.Application.Tests.TestCases;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace ReportingService.Application.Tests;
 
@@ -20,16 +20,19 @@ public class CustomerServiceTests
     private readonly Mock<ITransactionRepository> _transactionRepositoryMock;
     private readonly Mapper _mapper;
     private readonly CustomerService _sut;
+    private readonly Mock<ILogger<CustomerService>> _customerServiceLoggerMock;
 
     public CustomerServiceTests()
     {
         _customerRepositoryMock = new();
         _accountRepositoryMock = new();
         _transactionRepositoryMock = new();
+        _customerServiceLoggerMock = new();
 
         _mapper = new(MapperHelper.ConfigureMapper());
 
-        _sut = new(_customerRepositoryMock.Object, _transactionRepositoryMock.Object, _accountRepositoryMock.Object, _mapper);
+        _sut = new(_customerRepositoryMock.Object, _transactionRepositoryMock.Object,
+            _accountRepositoryMock.Object, _mapper, _customerServiceLoggerMock.Object);
     }
 
     [Theory]
