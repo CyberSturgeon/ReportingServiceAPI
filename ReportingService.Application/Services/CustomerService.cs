@@ -85,8 +85,9 @@ public class CustomerService(
     {
         logger.LogInformation($"GET customers by birth {dates.DateStart} - {dates.DateEnd}");
         var customers = await customerRepository.FindManyAsync(x =>
-            x.BirthDate.Day >= dates.DateStart.Day && x.BirthDate.Month == dates.DateStart.Month &&
-            x.BirthDate.Day <= dates.DateEnd.Day && x.BirthDate.Month == dates.DateEnd.Month);
+            (x.BirthDate.Month == dates.DateStart.Month && x.BirthDate.Day >= dates.DateStart.Day) ||
+            (x.BirthDate.Month > dates.DateStart.Month && x.BirthDate.Month < dates.DateEnd.Month) ||
+            (x.BirthDate.Month == dates.DateEnd.Month && x.BirthDate.Day <= dates.DateEnd.Day));
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
         logger.LogInformation("SUCCESS");
@@ -101,8 +102,10 @@ public class CustomerService(
                               $"bith {filter.BdayFilter.DateStart} - {filter.BdayFilter.DateEnd}");
         var customers = await customerRepository.FindManyAsync(x => filter == null ||
                 filter.TransactionFilter == null ||
-                x.Transactions.Where(y => y.Date >= filter.TransactionFilter.DateStart && y.Date < filter.TransactionFilter.DateEnd).ToList().Count > filter.TransactionFilter.TransactionsCount &&
-                filter.AccountFilter == null || x.Accounts.Where(y => filter.AccountFilter.Currencies.Contains(y.Currency)).ToList().Count > filter.AccountFilter.AccountsCount &&
+                x.Transactions.Where(y => y.Date >= filter.TransactionFilter.DateStart &&
+                y.Date < filter.TransactionFilter.DateEnd).ToList().Count > filter.TransactionFilter.TransactionsCount &&
+                filter.AccountFilter == null ||
+                x.Accounts.Where(y => filter.AccountFilter.Currencies.Contains(y.Currency)).ToList().Count > filter.AccountFilter.AccountsCount &&
                 filter.BdayFilter == null || x.BirthDate>= filter.BdayFilter.DateStart && x.BirthDate < filter.BdayFilter.DateEnd);
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);

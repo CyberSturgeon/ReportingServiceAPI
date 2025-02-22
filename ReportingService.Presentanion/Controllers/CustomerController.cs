@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration;
@@ -21,11 +21,11 @@ public class CustomerController(
     }
 
     [HttpGet("birth-date")]
-    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateFilter dates)
+    public async Task<ActionResult<List<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateFilter dates)
     {
-        var customer = mapper.Map<CustomerResponse>(
+        var customers = mapper.Map<List<CustomerResponse>>(
                        await customerService.GetCustomersByBirthAsync(dates));
-        return Ok(customer);
+        return Ok(customers);
     }
 
     [HttpGet("{id}/transactions")]
@@ -36,8 +36,10 @@ public class CustomerController(
     }
 
     [HttpGet]
-    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByFilterAsync([FromQuery] CustomerFilterRequest request)
+    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByFilterAsync([FromQuery] CustomerFilter request)
     {
+        var customers = mapper.Map<List<CustomerResponse>>(
+                                await customerService.GetCustomersAsync(request));
         return Ok(new List<CustomerResponse>());
     }
 }
