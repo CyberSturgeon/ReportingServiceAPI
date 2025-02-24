@@ -11,6 +11,4 @@ public class AccountModel
     public DateTime DateCreated { get; set; }
     public bool Status { get; set; }
     public Currency Currency { get; set; }
-    public ICollection<TransactionModel> Transactions { get; set; } = [];
-    public required CustomerModel Customer { get; set; }
 }
