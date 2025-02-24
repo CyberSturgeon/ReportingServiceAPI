@@ -28,8 +28,8 @@ public static class AccountTestCase
             DateCreated = DateTime.UtcNow,
             Status = true,
             Currency = Core.Configuration.Currency.RUB,
-            Transactions = transactions ?? [],
-            Customer = customer ?? new(),
+            //Transactions = transactions ?? [],
+            //Customer = customer ?? new(),
         };
     }
 }
