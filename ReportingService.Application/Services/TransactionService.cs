@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ReportingService.Application.Models;
 using ReportingService.Core;
+using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services
@@ -17,6 +18,18 @@ namespace ReportingService.Application.Services
                 x => x.CustomerId == customerId
                 && x.Date >= dates.DateFrom
                 && x.Date <= dates.DateTo);
+
+            var transactionModels = mapper.Map<List<TransactionModel>>(transactions)
+                .OrderByDescending(x => x.Date)
+                .ToList();
+
+            return transactionModels;
+        }
+
+        public async Task<List<TransactionModel>> SearchTransactionByAccount(Guid accountId)
+        {
+            var transactions = await transactionRepository.FindManyAsync(
+                x => x.AccountId == accountId);
 
             var transactionModels = mapper.Map<List<TransactionModel>>(transactions)
                 .OrderByDescending(x => x.Date)
