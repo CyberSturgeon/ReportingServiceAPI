@@ -17,4 +17,6 @@ public class CustomerModel
     public string LastName { get; set; }
     public bool IsDeactivated { get; set; }
     public Guid CustomerServiceId { get; set; }
+    public List<AccountModel> Accounts { get; set; }
+    public List<TransactionModel> Transactions { get; set; }
 }
