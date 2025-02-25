@@ -1,5 +1,4 @@
 ﻿using ReportingService.Application.Models;
-using ReportingService.Core.Configuration;
 using ReportingService.Core.Configuration.Filters;
 
 namespace ReportingService.Application.Services.Interfaces
@@ -10,7 +9,6 @@ namespace ReportingService.Application.Services.Interfaces
         Task<CustomerModel> GetCustomerByAccountIdAsync(Guid accountId);
         Task<CustomerModel> GetCustomerByIdAsync(Guid id);
         Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid transactionId);
-        Task<List<CustomerModel>> GetCustomersByTransactionsCountAsync(TransactionFilterForCustomer filter);
         Task<List<CustomerModel>> GetCustomersByBirthAsync(DateFilter dates);
         Task<CustomerModel> GetFullCustomerByIdAsync(Guid id);
         Task TransactionalAddCustomersAsync(List<CustomerModel> customerModels);

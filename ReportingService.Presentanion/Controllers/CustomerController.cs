@@ -34,12 +34,4 @@ public class CustomerController(
     {
         return Ok(new CustomerResponse());
     }
-
-    [HttpGet("transactions-count")]
-    public async Task<ActionResult<ICollection<CustomerResponse>>> GetCustomersByTransactionsCountAsync([FromQuery] TransactionFilterForCustomer request)
-    {
-        var customers = mapper.Map<List<CustomerResponse>>(
-                                await customerService.GetCustomersByTransactionsCountAsync(request));
-        return Ok(new List<CustomerResponse>());
-    }
 }
