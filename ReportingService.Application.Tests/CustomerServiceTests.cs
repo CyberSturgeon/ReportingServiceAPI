@@ -39,25 +39,31 @@ public class CustomerServiceTests
     }
 
     [Theory]
-    [InlineData(3, 4, 4, 4, 3)]
-    [InlineData(7, 14, 8, 21, 3)]
-    [InlineData(1, 3, 12, 1, 13)]
-    [InlineData(6, 4, 8, 20, 3)]
+    [InlineData(1, 6, 1, 11, 0)]
+    [InlineData(1, 1, 1, 11, 2)]
+    [InlineData(1, 27, 2, 28, 3)]
+    [InlineData(4, 20, 4, 26, 0)]
+    [InlineData(7, 20, 7, 29, 2)]
+    [InlineData(1, 1, 12, 29, 17)]
     public async Task GetCustomersByBirthAsync_ReturnsCustomersInRange(int startMonth,
         int startDay, int endMonth, int endDay, int expectedCount)
     {
         var customers = new List<Customer>
         {
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 1, 10) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 1, 29) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 1, 28) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 1, 2) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 1, 1) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 1, 12) },
             new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 1, 15) },
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 2, 3) },
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(2026, 8, 21) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 2, 28) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(2026, 8, 1) },
             new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1839, 7, 4) },
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1488, 7, 20) },
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1234, 7, 14) },
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 3, 10) },
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 3, 15) },
-            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 3, 3) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1488, 7, 29) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1234, 7, 28) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 3, 1) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 3, 29) },
+            new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 3, 2) },
             new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1990, 4, 10) },
             new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1985, 4, 15) },
             new Customer { Id = Guid.NewGuid(), BirthDate = new DateTime(1995, 4, 3) },

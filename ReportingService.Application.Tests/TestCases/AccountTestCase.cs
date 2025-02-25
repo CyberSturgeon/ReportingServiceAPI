@@ -1,4 +1,4 @@
-﻿using MYPBackendMicroserviceIntegrations.Enums;
+using MYPBackendMicroserviceIntegrations.Enums;
 using ReportingService.Application.Models;
 using ReportingService.Persistence.Entities;
 
@@ -29,8 +29,6 @@ public static class AccountTestCase
             DateCreated = DateTime.UtcNow,
             Status = true,
             Currency = Currency.RUB,
-            Transactions = transactions ?? [],
-            Customer = customer ?? new(),
         };
     }
 }

@@ -16,9 +16,9 @@ public class TransactionController(
     TransactionService transactionService,
     IMapper mapper) : Controller
 {
-    [HttpPost]
+    [HttpPost("by-customer")]
     public async Task<List<TransactionResponse>> SearchTransactions(
-        [FromBody] Guid customerId, 
+        [FromQuery] Guid customerId, 
         [FromBody] TransactionSearchFilter request)
     {
         var transactions = await transactionService.SearchTransaction(customerId, request);
@@ -28,9 +28,14 @@ public class TransactionController(
         return response;
     }
 
-    [HttpGet("{id}/customer")]
-    public async Task<ActionResult<CustomerResponse>> GetCustomerByTransactionIdAsync([FromRoute] Guid id)
+    [HttpPost("by-account")]
+    public async Task<List<TransactionResponse>> SearchTransactionsByAccount(
+        [FromQuery] Guid accountId)
     {
-        return Ok(new CustomerResponse());
+        var transactions = await transactionService.SearchTransactionByAccount(accountId);
+
+        var response = mapper.Map<List<TransactionResponse>>(transactions);
+
+        return response;
     }
 }

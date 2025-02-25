@@ -1,6 +1,7 @@
 using ReportingService.Application;
 using ReportingService.Persistence.Configuration;
 using ReportingService.Presentanion.Configuration;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,14 +25,18 @@ builder.Services.ConfigurePersistence(configuration);
 builder.Services.ConfigureApplication(configuration);
 builder.Services.ConfigurePresentation();
 
+Log.Logger = new Serilog.LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
+
+builder.Logging.AddSerilog();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 
 app.UseHttpsRedirection();
