@@ -10,6 +10,6 @@ public class CustomerMapperProfile : Profile
     public CustomerMapperProfile()
     {
         CreateMap<Customer, CustomerModel>().ReverseMap();
-        CreateMap<CustomerModel, CustomerMessage>().ReverseMap();
+        //CreateMap<CustomerMessage, CustomerModel>().;
     }
 }
