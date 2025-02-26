@@ -12,7 +12,7 @@ public class ComissionController(
 {
     [HttpGet("")]
     public async Task<ActionResult<ComissionResponse>> GetComissionByIdAsync([FromQuery] Guid? customerId = null,
-                                                       [FromQuery] Guid? accountId = null, [FromQuery] DateFilter? date = null)
+                                                       [FromQuery] Guid? accountId = null, [FromQuery] DateTimeFilter? date = null)
     {
         var customer = mapper.Map<ComissionResponse>(
                        await comissionService.GetComissionsAsync(customerId, accountId, date));

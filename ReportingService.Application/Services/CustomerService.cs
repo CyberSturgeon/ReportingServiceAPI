@@ -92,7 +92,7 @@ public class CustomerService(
             (x.BirthDate.Month>dates.DateStart.Month && x.BirthDate.Month<dates.DateEnd.Month));
 
         var customerModels = mapper.Map<List<CustomerModel>>(customers);
-        logger.LogInformation("SUCCESS");
+        logger.LogInformation($"SUCCESS {customerModels.Count} returned");
         return customerModels;
     }
 

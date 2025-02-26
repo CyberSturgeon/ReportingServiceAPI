@@ -72,13 +72,13 @@ public class ComissionService(
     }
 
     public async Task<IEnumerable<ComissionModel>> GetComissionsAsync(Guid? customerId, Guid? accountId,
-                    DateFilter date)
+                    DateTimeFilter date)
     {
         logger.LogInformation($"GET comissions by filter: customer {customerId}, account {accountId}, dates {date.DateStart} - {date.DateEnd}");
         var commisions = await comissionRepository.FindManyAsync(x =>
             customerId == null || x.Transaction.CustomerId == customerId &&
             accountId == null || x.Transaction.AccountId == accountId &&
-            date == null || x.Transaction.Date>= date.DateStart && x.Transaction.Date < date.DateEnd);
+            date == null || x.Transaction.Date >= date.DateStart && x.Transaction.Date < date.DateEnd);
 
         var comissionModels = mapper.Map<List<ComissionModel>>(commisions.ToList());
         logger.LogInformation("SUCCESS");
