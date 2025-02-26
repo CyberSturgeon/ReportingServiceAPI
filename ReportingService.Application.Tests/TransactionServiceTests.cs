@@ -3,7 +3,7 @@ using Moq;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
 using ReportingService.Application.Services;
-using ReportingService.Core;
+using ReportingService.Core.Configuration.Filters;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Tests

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
-using ReportingService.Core;
+using ReportingService.Core.Configuration.Filters;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services
@@ -35,6 +35,17 @@ namespace ReportingService.Application.Services
                 .OrderByDescending(x => x.Date)
                 .ToList();
 
+            return transactionModels;
+        }
+
+        public async Task<List<TransactionModel>> GetTransactionsByPeriodAsync(DateTimeFilter dates)
+        {
+            dates.DateStart = DateTime.SpecifyKind(dates.DateStart, DateTimeKind.Utc);
+            dates.DateEnd = DateTime.SpecifyKind(dates.DateEnd, DateTimeKind.Utc);
+
+            var transactions = await transactionRepository.FindManyAsync(x => x.Date >= dates.DateStart && x.Date < dates.DateEnd);
+            var transactionModels = mapper.Map<List<TransactionModel>>(transactions).OrderBy(x => x.CustomerId).ToList();
+            
             return transactionModels;
         }
     }

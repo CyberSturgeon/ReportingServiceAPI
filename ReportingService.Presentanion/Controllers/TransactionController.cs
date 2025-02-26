@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services;
 using ReportingService.Application.Services.Interfaces;
-using ReportingService.Core;
 using ReportingService.Core.Configuration;
+using ReportingService.Core.Configuration.Filters;
 using ReportingService.Presentanion.Models;
 
 namespace ReportingService.Presentanion.Controllers;
@@ -32,6 +32,16 @@ public class TransactionController(
     {
         var transactions = await transactionService.SearchTransactionByAccount(accountId);
 
+        var response = mapper.Map<List<TransactionResponse>>(transactions);
+
+        return response;
+    }
+
+    [HttpGet("by-period")]
+    public async Task<List<TransactionResponse>> GetTransactionsByPeriodAsync(
+        [FromQuery] DateTimeFilter dates)
+    {
+        var transactions = await transactionService.GetTransactionsByPeriodAsync(dates);
         var response = mapper.Map<List<TransactionResponse>>(transactions);
 
         return response;
