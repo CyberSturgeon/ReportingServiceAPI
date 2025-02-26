@@ -13,7 +13,7 @@ internal static class AccountEntityConfiguration
 
         builder.Entity<Account>().Property<DateTime>(x => x.DateCreated);
 
-        builder.Entity<Account>().Property(x => x.Status)
+        builder.Entity<Account>().Property(x => x.IsDeactivated)
         .IsRequired();
 
         builder.Entity<Account>().Property(x => x.Currency)

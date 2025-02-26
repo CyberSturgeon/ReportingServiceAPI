@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using MYPBackendMicroserviceIntegrations.Messages;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
-using System.Transactions;
 
 
 namespace ReportingService.Application.Consumers
