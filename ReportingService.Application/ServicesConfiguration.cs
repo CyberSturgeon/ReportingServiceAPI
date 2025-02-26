@@ -19,27 +19,42 @@ public static class ServicesConfiguration
         services.AddTransient<IAccountService, AccountService>();
         services.AddScoped<ITransactionService, TransactionService>();
 
-        //services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
+        services.AddOptions<RabbitMQSettings>()
+         .Configure<IConfiguration>((options, configuration) =>
+         {
+             var section = configuration.GetSection("RabbitMq");
+             options.Host = section.GetValue<string>("Host") ?? string.Empty;
+             options.Username = section.GetValue<string>("Username") ?? string.Empty;
+             options.Password = section.GetValue<string>("Password") ?? string.Empty;
+             options.TransactioncreatedQueue = section.GetSection("Consumers").GetValue<string>("TransactioncreatedQueue") ?? string.Empty;
+             options.AccountUpdateQueue = section.GetSection("Consumers").GetValue<string>("AccountUpdateQueue") ?? string.Empty;
+         });
 
-        //services.AddMassTransit(x =>
-        //{
-        //    x.AddConsumer<CustomerConsumer>();
+        services.AddMassTransit(x =>
+        {
+            x.AddConsumer<TransactionConsumer>();
+            x.AddConsumer<AccountConsumer>();
 
-        //    x.UsingRabbitMq((context, cfg) =>
-        //    {
-        //        var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
 
-        //        cfg.Host(settings.Host, settings.VirtualHost, h =>
-        //        {
-        //            h.Username(settings.Username);
-        //            h.Password(settings.Password);
-        //        });
+                cfg.Host(settings.Host, h =>
+                {
+                    h.Username(settings.Username);
+                    h.Password(settings.Password);
+                });
 
-        //        cfg.ReceiveEndpoint(settings.QueueName, e =>
-        //        {
-        //            e.ConfigureConsumer<CustomerConsumer>(context);
-        //        });
-        //    });
-        //});
-    }
+                cfg.ReceiveEndpoint(settings.TransactioncreatedQueue, e =>
+                {
+                    e.ConfigureConsumer<TransactionConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint(settings.AccountUpdateQueue, e =>
+                {
+                    e.ConfigureConsumer<AccountConsumer>(context);
+                });
+            });
+        });
+    } 
 }

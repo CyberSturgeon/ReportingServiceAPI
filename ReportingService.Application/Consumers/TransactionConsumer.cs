@@ -1,27 +1,26 @@
 ﻿using AutoMapper;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using MYPBackendMicroserviceIntegrations.Messages;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReportingService.Application.Consumers
 {
     public class TransactionConsumer(
         ITransactionService transactionService,
-        IMapper mapper) : IConsumer<List<TransactionCreatedMessage>>
+        ILogger<TransactionConsumer> logger,
+        IMapper mapper) : IConsumer<TransactionCreatedMessage>
     {
 
-        public async Task Consume(ConsumeContext<List<TransactionCreatedMessage>> context)
+        public async Task Consume(ConsumeContext<TransactionCreatedMessage> context)
         {
+            logger.LogInformation($"CONSUME {context.Message.Id} transaction");
             var transaction = context.Message;
-            var transactionModels = mapper.Map<List<TransactionModel>>(transaction);
+            var transactionModel = mapper.Map<TransactionModel>(transaction);
 
-            await transactionService.TransactionalAddAsync(transactionModels);
+            //await transactionService.TransactionalAddAsync(transactionModel);
+            logger.LogInformation($"UPDATE {context.Message.Id} transaction SUCCESS");
         }
     }
 }

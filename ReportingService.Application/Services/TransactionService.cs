@@ -3,7 +3,6 @@ using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration.Filters;
 using ReportingService.Persistence.Entities;
-using ReportingService.Persistence.Repositories;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services
