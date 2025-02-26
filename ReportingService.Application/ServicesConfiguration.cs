@@ -19,44 +19,48 @@ public static class ServicesConfiguration
         services.AddTransient<ITransactionService, TransactionService>();
         services.AddTransient<IAccountService, AccountService>();
 
+        services.AddOptions<RabbitMQSettings>()
+         .Configure<IConfiguration>((options, configuration) =>
+         {
+             var section = configuration.GetSection("RabbitMq");
+             options.Host = section.GetValue<string>("Host") ?? string.Empty;
+             options.Username = section.GetValue<string>("Username") ?? string.Empty;
+             options.Password = section.GetValue<string>("Password") ?? string.Empty;
+             options.CustomerQueue = section.GetSection("Consumers").GetValue<string>("RoleUpdateQueue") ?? string.Empty;
+             options.RoleUpdateQueue = section.GetSection("Consumers").GetValue<string>("CustomerQueue") ?? string.Empty;
+         });
         //services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
 
-        //services.AddMassTransit(x =>
-        //{
-        //    x.AddConsumer<CustomerConsumer>();
+        services.AddMassTransit(x =>
+        {
+            x.AddConsumer<CustomerWithAccountConsumer>();
+            x.AddConsumer<CustomerVipUpdateConsumer>();
 
-        //    x.UsingRabbitMq((context, cfg) =>
-        //    {
-        //        var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
 
-        //        cfg.Host(settings.Host, settings.VirtualHost, h =>
-        //        {
-        //            h.Username(settings.Username);
-        //            h.Password(settings.Password);
-        //        });
-                //cfg.UseTransaction(t =>
-                //{
-                //    t.Timeout = TimeSpan.FromSeconds(120);
-                //});
+                cfg.Host(settings.Host, h =>
+                {
+                    h.Username(settings.Username);
+                    h.Password(settings.Password);
+                });
 
-        //        cfg.ReceiveEndpoint(settings.CustomerQueue, e =>
-        //        {
-        //            e.ConfigureConsumer<CustomerConsumer>(context);
-        //            e.Bind(settings.ExchangeName, s =>
-        //            {
-        //                s.RoutingKey = "customer.add";
-        //            });
-        //        });
+                cfg.UseTransaction(t =>
+                {
+                    t.Timeout = TimeSpan.FromSeconds(120);
+                });
 
-        //        cfg.ReceiveEndpoint(settings.RoleUpdateQueue, e =>
-        //        {
-        //            e.ConfigureConsumer<CustomerConsumer>(context);
-        //            e.Bind(settings.ExchangeName, s =>
-        //            {
-        //                s.RoutingKey = "role.update";
-        //            });
-        //        });
-        //    });
-        //});
+                cfg.ReceiveEndpoint(settings.CustomerQueue, e =>
+                {
+                    e.ConfigureConsumer<CustomerWithAccountConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint(settings.RoleUpdateQueue, e =>
+                {
+                    e.ConfigureConsumer<CustomerVipUpdateConsumer>(context);
+                });
+            });
+        });
     }
 }

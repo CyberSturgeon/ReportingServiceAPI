@@ -34,4 +34,13 @@ public class AccountService(
         accountRepository.TransactionalAddRangeAsync(accounts);
         logger.LogInformation("SUCCESS");
     }
+
+    public async Task AddAsync(AccountModel accountModel)
+    {
+        logger.LogInformation($"CREATE {accountModel.Id} customer");
+
+        var account = mapper.Map<Account>(accountModel);
+        accountRepository.AddAsync(account);
+        logger.LogInformation("SUCCESS");
+    }
 }

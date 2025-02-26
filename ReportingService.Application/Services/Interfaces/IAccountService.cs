@@ -6,5 +6,6 @@ namespace ReportingService.Application.Services.Interfaces
     {
         Task<List<AccountModel>> GetAccountsByCustomerIdAsync(Guid customerId);
         Task TransactionalAddAsync(List<AccountModel> accountModels);
+        Task AddAsync(AccountModel accountModel);
     }
 }
