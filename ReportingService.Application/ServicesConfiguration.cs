@@ -35,9 +35,22 @@ public static class ServicesConfiguration
         //            h.Password(settings.Password);
         //        });
 
-        //        cfg.ReceiveEndpoint(settings.QueueName, e =>
+        //        cfg.ReceiveEndpoint(settings.CustomerQueue, e =>
         //        {
         //            e.ConfigureConsumer<CustomerConsumer>(context);
+        //            e.Bind(settings.ExchangeName, s =>
+        //            {
+        //                s.RoutingKey = "customer.add";
+        //            });
+        //        });
+
+        //        cfg.ReceiveEndpoint(settings.RoleUpdateQueue, e =>
+        //        {
+        //            e.ConfigureConsumer<CustomerConsumer>(context);
+        //            e.Bind(settings.ExchangeName, s =>
+        //            {
+        //                s.RoutingKey = "role.update";
+        //            });
         //        });
         //    });
         //});
