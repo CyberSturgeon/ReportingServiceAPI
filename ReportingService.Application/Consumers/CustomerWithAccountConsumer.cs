@@ -25,7 +25,7 @@ namespace ReportingService.Application.Consumers
             var customerModel = mapper.Map<CustomerModel>(customer);
             var accountModel = mapper.Map<AccountModel>(account);
 
-            await customerService.AddCustomerAsync(customerModel);
+            await customerService.AddAsync(customerModel);
             await accountService.AddAsync(accountModel);
             logger.LogInformation($"ADD Customer {context.Message.Customer.Id} WithAccount {context.Message.Account.Id} SUCCESS");
             

@@ -18,7 +18,7 @@ public class CustomerService(
         IAccountRepository accountRepository,
         IMapper mapper, ILogger<CustomerService> logger) : ICustomerService
 {
-    public async Task AddCustomerAsync(CustomerModel customerModel)
+    public async Task AddAsync(CustomerModel customerModel)
     {
         logger.LogInformation($"CREATE customer {LogHelper.HideEmail(customerModel.Email)}");
         var c = mapper.Map<Customer>(customerModel);

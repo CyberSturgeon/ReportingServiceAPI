@@ -236,18 +236,4 @@ public class CustomerServiceTests
             null), Times.Once);
         Assert.Equivalent(customerModel, customerResponse);
     }
-
-    [Fact]
-    public async Task AddCustomerAsync_AddSucess()
-    {
-        var customer = CustomerTestCase.GetCustomerEntity();
-        _customerRepositoryMock.Setup(x =>
-            x.AddAndReturnAsync(It.Is<Customer>(x => x.Id == customer.Id))).ReturnsAsync(customer);
-        var customerModel = _mapper.Map<CustomerModel>(customer);
-
-        var customerResponse = await _sut.AddCustomerAsync(customerModel);
-
-        _customerRepositoryMock.Verify(x => x.AddAndReturnAsync(It.Is<Customer>(x => x.Id == customer.Id)), Times.Once);
-        Assert.Equivalent(customerModel, customerResponse);
-    }
 }

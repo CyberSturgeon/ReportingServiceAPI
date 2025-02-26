@@ -7,7 +7,7 @@ namespace ReportingService.Application.Services.Interfaces
     public interface ICustomerService
     {
         Task BatchUpdateRoleAync(List<Guid> customerIds);
-        Task AddCustomerAsync(CustomerModel customerModel);
+        Task AddAsync(CustomerModel customerModel);
         Task<CustomerModel> GetCustomerByAccountIdAsync(Guid accountId);
         Task<CustomerModel> GetCustomerByIdAsync(Guid id);
         Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid transactionId);

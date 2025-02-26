@@ -26,15 +26,16 @@ public static class ServicesConfiguration
              options.Host = section.GetValue<string>("Host") ?? string.Empty;
              options.Username = section.GetValue<string>("Username") ?? string.Empty;
              options.Password = section.GetValue<string>("Password") ?? string.Empty;
-             options.CustomerQueue = section.GetSection("Consumers").GetValue<string>("CustomerQueue") ?? string.Empty;
+             options.CustomerWithAccountQueue = section.GetSection("Consumers").GetValue<string>("CustomerWithAccountQueue") ?? string.Empty;
+             options.CustomerMessageQueue = section.GetSection("Consumers").GetValue<string>("CustomerMessageQueue") ?? string.Empty;
              options.RoleUpdateQueue = section.GetSection("Consumers").GetValue<string>("RoleUpdateQueue") ?? string.Empty;
          });
-        //services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
 
         services.AddMassTransit(x =>
         {
             x.AddConsumer<CustomerWithAccountConsumer>();
             x.AddConsumer<CustomerVipUpdateConsumer>();
+            x.AddConsumer<CustomerMessageConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -46,12 +47,7 @@ public static class ServicesConfiguration
                     h.Password(settings.Password);
                 });
 
-                cfg.UseTransaction(t =>
-                {
-                    t.Timeout = TimeSpan.FromSeconds(120);
-                });
-
-                cfg.ReceiveEndpoint(settings.CustomerQueue, e =>
+                cfg.ReceiveEndpoint(settings.CustomerWithAccountQueue, e =>
                 {
                     e.ConfigureConsumer<CustomerWithAccountConsumer>(context);
                 });
@@ -59,6 +55,11 @@ public static class ServicesConfiguration
                 cfg.ReceiveEndpoint(settings.RoleUpdateQueue, e =>
                 {
                     e.ConfigureConsumer<CustomerVipUpdateConsumer>(context);
+                });
+
+                cfg.ReceiveEndpoint(settings.CustomerMessageQueue, e =>
+                {
+                    e.ConfigureConsumer<CustomerMessageConsumer>(context);
                 });
             });
         });
