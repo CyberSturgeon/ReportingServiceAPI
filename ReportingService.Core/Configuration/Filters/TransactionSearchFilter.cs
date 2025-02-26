@@ -1,4 +1,4 @@
-﻿namespace ReportingService.Core;
+﻿namespace ReportingService.Core.Configuration.Filters;
 
 public class TransactionSearchFilter
 {

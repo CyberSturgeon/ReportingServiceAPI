@@ -1,5 +1,5 @@
 ﻿using ReportingService.Application.Models;
-using ReportingService.Core;
+using ReportingService.Core.Configuration.Filters;
 
 namespace ReportingService.Application.Services.Interfaces
 {
@@ -7,5 +7,6 @@ namespace ReportingService.Application.Services.Interfaces
     {
         Task<List<TransactionModel>> SearchTransaction(Guid customerId, TransactionSearchFilter dates);
         Task<List<TransactionModel>> SearchTransactionByAccount(Guid accountId);
+        Task<List<TransactionModel>> GetTransactionsByPeriodAsync(DateTimeFilter dates);
     }
 }
