@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration.Filters;
@@ -52,7 +51,7 @@ public class CustomerControllerTests
     public async Task GetByBirth_GetSuccess()
     {
         var expectedStatusCode = HttpStatusCode.OK;
-        var dates = new DateFilter { DateStart = DateTime.Now, DateEnd = DateTime.Now };
+        var dates = new DateFilter { DateStart = DateOnly.FromDateTime(DateTime.Now), DateEnd = DateOnly.FromDateTime(DateTime.Now) };
         var customerModels = new List<CustomerModel> { new CustomerModel()};
         _customerServiceMock.Setup(t => t.GetByBirthAsync(dates)).ReturnsAsync(customerModels);
 

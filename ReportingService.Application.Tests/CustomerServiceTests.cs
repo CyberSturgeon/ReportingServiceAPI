@@ -8,7 +8,6 @@ using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 using ReportingService.Application.Tests.TestCases;
 using Microsoft.EntityFrameworkCore.Query;
-using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -76,8 +75,8 @@ public class CustomerServiceTests
         _customerRepositoryMock.Setup(r => r.FindManyAsync(It.IsAny<Expression<Func<Customer, bool>>>()))
                 .ReturnsAsync((Expression<Func<Customer, bool>> predicate) => customers.Where(predicate.Compile()).ToList());
 
-        var dateStart = new DateTime(DateTime.Now.Year, startMonth, startDay);
-        var dateEnd = new DateTime(DateTime.Now.Year, endMonth, endDay);
+        var dateStart = new DateOnly(DateTime.Now.Year, startMonth, startDay);
+        var dateEnd = new DateOnly(DateTime.Now.Year, endMonth, endDay);
         var dates = new DateFilter { DateStart = dateStart, DateEnd = dateEnd };
 
         var result = await _sut.GetByBirthAsync(dates);

@@ -6,10 +6,7 @@ using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core;
 using ReportingService.Core.Configuration;
 using ReportingService.Presentanion.Models;
-//GET (monthCount transCount) => List<Guid> Ids
-//GET (monthCount money) => List<Guid> Ids
-// GET (day month) => List<Guid> Ids
-// 
+
 namespace ReportingService.Presentanion.Controllers;
 
 [Route("api/transactions")]

@@ -2,7 +2,6 @@
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core;
-using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services

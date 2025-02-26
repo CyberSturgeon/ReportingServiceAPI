@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Persistence.Configuration;

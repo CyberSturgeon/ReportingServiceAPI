@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using ReportingService.Application.Models;
 using ReportingService.Persistence.Entities;
 

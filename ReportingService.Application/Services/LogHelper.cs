@@ -1,5 +1,4 @@
-﻿
-namespace ReportingService.Application.Services;
+﻿namespace ReportingService.Application.Services;
 
 internal static class LogHelper
 {

@@ -5,11 +5,6 @@ using ReportingService.Application.Mappings;
 using ReportingService.Application.Services;
 using ReportingService.Core;
 using ReportingService.Persistence.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReportingService.Application.Tests
 {

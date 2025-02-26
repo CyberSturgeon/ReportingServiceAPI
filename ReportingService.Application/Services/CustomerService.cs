@@ -5,7 +5,6 @@ using MYPBackendMicroserviceIntegrations.Enums;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
-using ReportingService.Core.Configuration;
 using ReportingService.Core.Configuration.Filters;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;

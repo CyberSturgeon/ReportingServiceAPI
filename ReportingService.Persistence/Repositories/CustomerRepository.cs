@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MYPBackendMicroserviceIntegrations.Enums;
 using Npgsql;
 using NpgsqlTypes;

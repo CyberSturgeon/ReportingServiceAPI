@@ -1,5 +1,4 @@
-﻿
-namespace ReportingService.Persistence.Entities;
+﻿namespace ReportingService.Persistence.Entities;
 
 public class Comission
 {

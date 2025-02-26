@@ -1,5 +1,4 @@
-﻿
-using ReportingService.Persistence.Entities;
+﻿using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Persistence.Repositories;
