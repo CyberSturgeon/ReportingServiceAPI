@@ -6,12 +6,12 @@ namespace ReportingService.Application.Services.Interfaces
     public interface ICustomerService
     {
         Task BatchUpdateRoleAync(List<Guid> customerIds);
-        Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel);
-        Task<CustomerModel> GetCustomerByAccountIdAsync(Guid accountId);
-        Task<CustomerModel> GetCustomerByIdAsync(Guid id);
-        Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid transactionId);
-        Task<List<CustomerModel>> GetCustomersByBirthAsync(DateFilter dates);
-        Task<CustomerModel> GetFullCustomerByIdAsync(Guid id);
-        Task TransactionalAddCustomersAsync(List<CustomerModel> customerModels);
+        Task<CustomerModel> AddAsync(CustomerModel customerModel);
+        Task<CustomerModel> GetByAccountIdAsync(Guid accountId);
+        Task<CustomerModel> GetByIdAsync(Guid id);
+        Task<CustomerModel> GetByTransactionIdAsync(Guid transactionId);
+        Task<List<CustomerModel>> GetByBirthAsync(DateFilter dates);
+        Task<CustomerModel> GetFullByIdAsync(Guid id);
+        Task TransactionalAddAsync(List<CustomerModel> customerModels);
     }
 }

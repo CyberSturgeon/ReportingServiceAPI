@@ -18,7 +18,7 @@ public class CustomerService(
         IAccountRepository accountRepository,
         IMapper mapper, ILogger<CustomerService> logger) : ICustomerService
 {
-    public async Task<CustomerModel> AddCustomerAsync(CustomerModel customerModel)
+    public async Task<CustomerModel> AddAsync(CustomerModel customerModel)
     {
         logger.LogInformation($"CREATE customer {LogHelper.HideEmail(customerModel.Email)}");
         var customer = await customerRepository.AddAndReturnAsync(mapper.Map<Customer>(customerModel));
@@ -26,7 +26,7 @@ public class CustomerService(
         return mapper.Map<CustomerModel>(customer);
     }
 
-    public async Task<CustomerModel> GetCustomerByIdAsync(Guid id)
+    public async Task<CustomerModel> GetByIdAsync(Guid id)
     {
         logger.LogInformation($"GET customer {id}");
         var customer = await customerRepository.GetByIdAsync(id) ??
@@ -37,7 +37,7 @@ public class CustomerService(
         return customerModel;
     }
 
-    public async Task<CustomerModel> GetFullCustomerByIdAsync(Guid id)
+    public async Task<CustomerModel> GetFullByIdAsync(Guid id)
     {
         logger.LogInformation($"GET full customer {id}");
         var customer = await customerRepository.FindAsync(x => x.Id == id,
@@ -54,7 +54,7 @@ public class CustomerService(
         return customerModel;
     }
 
-    public async Task<CustomerModel> GetCustomerByAccountIdAsync(Guid accountId)
+    public async Task<CustomerModel> GetByAccountIdAsync(Guid accountId)
     {
         logger.LogInformation($"Get customer by account {accountId}");
         var account = await accountRepository.GetByIdAsync(accountId) ??
@@ -68,7 +68,7 @@ public class CustomerService(
         return customerModel;
     }
 
-    public async Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid transactionId)
+    public async Task<CustomerModel> GetByTransactionIdAsync(Guid transactionId)
     {
         logger.LogInformation($"GET customer by transaction {transactionId}");
         var transaction = await transactionRepository.GetByIdAsync(transactionId) ??
@@ -82,7 +82,7 @@ public class CustomerService(
         return customerModel;
     }
 
-    public async Task<List<CustomerModel>> GetCustomersByBirthAsync(DateFilter dates)
+    public async Task<List<CustomerModel>> GetByBirthAsync(DateFilter dates)
     {
         logger.LogInformation($"GET customers by birth {dates.DateStart} - {dates.DateEnd}");
         var customers = await customerRepository.FindManyAsync(x =>
@@ -96,7 +96,7 @@ public class CustomerService(
         return customerModels;
     }
 
-    public async Task TransactionalAddCustomersAsync(List<CustomerModel> customerModels)
+    public async Task TransactionalAddAsync(List<CustomerModel> customerModels)
     {
         logger.LogInformation($"CREATE {customerModels.Count} customers ");
         CheckAccounts(customerModels);
