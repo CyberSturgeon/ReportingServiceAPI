@@ -2,6 +2,8 @@
 using ReportingService.Application.Models;
 using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration.Filters;
+using ReportingService.Persistence.Entities;
+using ReportingService.Persistence.Repositories;
 using ReportingService.Persistence.Repositories.Interfaces;
 
 namespace ReportingService.Application.Services
@@ -10,7 +12,7 @@ namespace ReportingService.Application.Services
         ITransactionRepository transactionRepository,
         IMapper mapper) : ITransactionService
     {
-        public async Task<List<TransactionModel>> SearchTransaction(
+        public async Task<List<TransactionModel>> SearchTransactionAsync(
             Guid customerId,
             TransactionSearchFilter dates)
         {
@@ -26,7 +28,7 @@ namespace ReportingService.Application.Services
             return transactionModels;
         }
 
-        public async Task<List<TransactionModel>> SearchTransactionByAccount(Guid accountId)
+        public async Task<List<TransactionModel>> SearchTransactionByAccountAsync(Guid accountId)
         {
             var transactions = await transactionRepository.FindManyAsync(
                 x => x.AccountId == accountId);
@@ -44,6 +46,12 @@ namespace ReportingService.Application.Services
             var transactionModels = mapper.Map<List<TransactionModel>>(transactions).OrderBy(x => x.CustomerId).ToList();
             
             return transactionModels;
+        }
+
+        public async Task TransactionalAddAsync(List<TransactionModel> transactionModels)
+        {
+            var transactions = mapper.Map<List<Transaction>>(transactionModels);
+            await transactionRepository.TransactionalAddRangeAsync(transactions);
         }
     }
 }
