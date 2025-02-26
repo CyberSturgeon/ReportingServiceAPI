@@ -40,7 +40,7 @@ public class AccountService(
         logger.LogInformation($"CREATE {accountModel.Id} account");
 
         var account = mapper.Map<Account>(accountModel);
-        accountRepository.AddAsync(account);
+        accountRepository.AddAccountRawSqlAsync(account);
         logger.LogInformation("SUCCESS");
     }
 }

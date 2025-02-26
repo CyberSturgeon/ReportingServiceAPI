@@ -13,7 +13,7 @@ public static class AccountTestCase
             Id = Guid.NewGuid(),
             CustomerId = customerId ?? Guid.NewGuid(),
             DateCreated = DateTime.UtcNow,
-            Status = true,
+            IsDeactivated = true,
             Currency = Currency.RUB,
             Transactions = transactions ?? [],
             Customer = customer ?? new(),
@@ -27,7 +27,7 @@ public static class AccountTestCase
             Id = Guid.NewGuid(),
             CustomerId = customerId ?? Guid.NewGuid(),
             DateCreated = DateTime.UtcNow,
-            Status = true,
+            IsDeactivated = true,
             Currency = Currency.RUB,
         };
     }
