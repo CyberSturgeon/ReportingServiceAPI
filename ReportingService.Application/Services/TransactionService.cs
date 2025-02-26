@@ -40,6 +40,9 @@ namespace ReportingService.Application.Services
 
         public async Task<List<TransactionModel>> GetTransactionsByPeriodAsync(DateTimeFilter dates)
         {
+            dates.DateStart = DateTime.SpecifyKind(dates.DateStart, DateTimeKind.Utc);
+            dates.DateEnd = DateTime.SpecifyKind(dates.DateEnd, DateTimeKind.Utc);
+
             var transactions = await transactionRepository.FindManyAsync(x => x.Date >= dates.DateStart && x.Date < dates.DateEnd);
             var transactionModels = mapper.Map<List<TransactionModel>>(transactions).OrderBy(x => x.CustomerId).ToList();
             
