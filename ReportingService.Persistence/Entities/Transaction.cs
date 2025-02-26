@@ -14,5 +14,7 @@ public class Transaction
     public Currency Currency { get; set; }
     public Guid CustomerId { get; set; }
     public Customer Customer { get; set; }
-
+    public Transaction? RelatedTransaction { get; set; }
+    public Guid? RelatedTransactionId { get; set; }
+    
 }
