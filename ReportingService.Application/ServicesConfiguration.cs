@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -26,6 +26,16 @@ public static class ServicesConfiguration
              options.Host = section.GetValue<string>("Host") ?? string.Empty;
              options.Username = section.GetValue<string>("Username") ?? string.Empty;
              options.Password = section.GetValue<string>("Password") ?? string.Empty;
+             options.TransactioncreatedQueue = section.GetSection("Consumers").GetValue<string>("TransactioncreatedQueue") ?? string.Empty;
+             options.AccountUpdateQueue = section.GetSection("Consumers").GetValue<string>("AccountUpdateQueue") ?? string.Empty;
+         });
+        services.AddOptions<RabbitMQSettings>()
+         .Configure<IConfiguration>((options, configuration) =>
+         {
+             var section = configuration.GetSection("RabbitMq");
+             options.Host = section.GetValue<string>("Host") ?? string.Empty;
+             options.Username = section.GetValue<string>("Username") ?? string.Empty;
+             options.Password = section.GetValue<string>("Password") ?? string.Empty;
              options.CustomerWithAccountQueue = section.GetSection("Consumers").GetValue<string>("CustomerWithAccountQueue") ?? string.Empty;
              options.CustomerMessageQueue = section.GetSection("Consumers").GetValue<string>("CustomerMessageQueue") ?? string.Empty;
              options.RoleUpdateQueue = section.GetSection("Consumers").GetValue<string>("RoleUpdateQueue") ?? string.Empty;
@@ -33,33 +43,48 @@ public static class ServicesConfiguration
 
         services.AddMassTransit(x =>
         {
-            x.AddConsumer<CustomerWithAccountConsumer>();
-            x.AddConsumer<CustomerVipUpdateConsumer>();
-            x.AddConsumer<CustomerMessageConsumer>();
-
-            x.UsingRabbitMq((context, cfg) =>
+            x.AddConsumer<TransactionConsumer>();
+            x.AddConsumer<AccountConsumer>();
+            services.AddMassTransit(x =>
             {
-                var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
+                x.AddConsumer<CustomerWithAccountConsumer>();
+                x.AddConsumer<CustomerVipUpdateConsumer>();
+                x.AddConsumer<CustomerMessageConsumer>();
 
-                cfg.Host(settings.Host, h =>
+                x.UsingRabbitMq((context, cfg) =>
                 {
-                    h.Username(settings.Username);
-                    h.Password(settings.Password);
-                });
+                    var settings = context.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
 
-                cfg.ReceiveEndpoint(settings.CustomerWithAccountQueue, e =>
-                {
-                    e.ConfigureConsumer<CustomerWithAccountConsumer>(context);
-                });
+                    cfg.Host(settings.Host, h =>
+                    {
+                        h.Username(settings.Username);
+                        h.Password(settings.Password);
+                    });
 
-                cfg.ReceiveEndpoint(settings.RoleUpdateQueue, e =>
-                {
-                    e.ConfigureConsumer<CustomerVipUpdateConsumer>(context);
-                });
+                    cfg.ReceiveEndpoint(settings.TransactioncreatedQueue, e =>
+                    {
+                        e.ConfigureConsumer<TransactionConsumer>(context);
+                    });
 
-                cfg.ReceiveEndpoint(settings.CustomerMessageQueue, e =>
-                {
-                    e.ConfigureConsumer<CustomerMessageConsumer>(context);
+                    cfg.ReceiveEndpoint(settings.AccountUpdateQueue, e =>
+                    {
+                        e.ConfigureConsumer<AccountConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint(settings.CustomerWithAccountQueue, e =>
+                    {
+                        e.ConfigureConsumer<CustomerWithAccountConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint(settings.RoleUpdateQueue, e =>
+                    {
+                        e.ConfigureConsumer<CustomerVipUpdateConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint(settings.CustomerMessageQueue, e =>
+                    {
+                        e.ConfigureConsumer<CustomerMessageConsumer>(context);
+                    });
                 });
             });
         });

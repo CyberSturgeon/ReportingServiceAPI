@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Moq;
 using ReportingService.Application.Exceptions;
 using ReportingService.Application.Mappings;
 using ReportingService.Application.Services;
+using ReportingService.Core;
 using ReportingService.Core.Configuration.Filters;
 using ReportingService.Persistence.Repositories.Interfaces;
 
@@ -29,7 +30,7 @@ namespace ReportingService.Application.Tests
             var msg = $"Customer {id} not found";
             var dates = new TransactionSearchFilter { DateFrom = DateTime.Now, DateTo = DateTime.Now };
 
-            var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.SearchTransaction(id, dates));
+            var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.SearchTransactionAsync(id, dates));
 
             Assert.Equal(msg, ex.Message);
         }

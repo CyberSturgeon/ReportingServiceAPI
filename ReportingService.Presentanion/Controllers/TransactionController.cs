@@ -15,11 +15,11 @@ public class TransactionController(
     IMapper mapper) : Controller
 {
     [HttpPost("by-customer")]
-    public async Task<List<TransactionResponse>> SearchTransactions(
+    public async Task<List<TransactionResponse>> SearchTransactionsAsync(
         [FromQuery] Guid customerId, 
         [FromBody] TransactionSearchFilter request)
     {
-        var transactions = await transactionService.SearchTransaction(customerId, request);
+        var transactions = await transactionService.SearchTransactionAsync(customerId, request);
 
         var response = mapper.Map<List<TransactionResponse>>(transactions);
             
@@ -27,10 +27,10 @@ public class TransactionController(
     }
 
     [HttpPost("by-account")]
-    public async Task<List<TransactionResponse>> SearchTransactionsByAccount(
+    public async Task<List<TransactionResponse>> SearchTransactionsByAccountAsync(
         [FromQuery] Guid accountId)
     {
-        var transactions = await transactionService.SearchTransactionByAccount(accountId);
+        var transactions = await transactionService.SearchTransactionByAccountAsync(accountId);
 
         var response = mapper.Map<List<TransactionResponse>>(transactions);
 

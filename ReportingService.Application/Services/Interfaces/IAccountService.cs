@@ -1,4 +1,4 @@
-﻿using ReportingService.Application.Models;
+using ReportingService.Application.Models;
 
 namespace ReportingService.Application.Services.Interfaces
 {
