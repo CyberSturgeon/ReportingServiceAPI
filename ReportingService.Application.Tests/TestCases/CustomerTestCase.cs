@@ -1,4 +1,5 @@
-﻿using ReportingService.Application.Models;
+﻿using MYPBackendMicroserviceIntegrations.Enums;
+using ReportingService.Application.Models;
 using ReportingService.Persistence.Entities;
 
 namespace ReportingService.Application.Tests.TestCases;
@@ -10,7 +11,7 @@ public static class CustomerTestCase
         return new Customer
         {
             Id = Guid.NewGuid(),
-            Role = Core.Configuration.Role.Regular,
+            Role = Role.Regular,
             Phone = "test",
             Address = "test",
             Email = "test",
@@ -30,7 +31,7 @@ public static class CustomerTestCase
         return new CustomerModel
         {
             Id = Guid.NewGuid(),
-            Role = Core.Configuration.Role.Regular,
+            Role = Role.Regular,
             Phone = "test",
             Address = "test",
             Email = "test",

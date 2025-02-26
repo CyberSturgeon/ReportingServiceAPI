@@ -1,5 +1,4 @@
-﻿
-using ReportingService.Core.Configuration;
+﻿using MYPBackendMicroserviceIntegrations.Enums;
 
 namespace ReportingService.Application.Models;
 

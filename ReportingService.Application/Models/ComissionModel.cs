@@ -1,5 +1,4 @@
-﻿
-namespace ReportingService.Application.Models;
+﻿namespace ReportingService.Application.Models;
 
 public class ComissionModel
 {

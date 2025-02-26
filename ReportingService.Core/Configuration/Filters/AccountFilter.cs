@@ -1,4 +1,6 @@
-﻿namespace ReportingService.Core.Configuration.Filters;
+﻿using MYPBackendMicroserviceIntegrations.Enums;
+
+namespace ReportingService.Core.Configuration.Filters;
 
 public class AccountFilter
 {
