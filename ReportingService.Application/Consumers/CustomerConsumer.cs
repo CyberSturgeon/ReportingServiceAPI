@@ -17,7 +17,7 @@ namespace ReportingService.Application.Consumers
             var customers = context.Message;
             var customerModels = mapper.Map<List<CustomerModel>>(customers);
 
-            await customerService.TransactionalAddCustomersAsync(customerModels);
+            await customerService.TransactionalAddAsync(customerModels);
         }
 
         public async Task Consume(ConsumeContext<List<Guid>> context)

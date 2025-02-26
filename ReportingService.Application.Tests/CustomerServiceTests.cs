@@ -45,7 +45,7 @@ public class CustomerServiceTests
     [InlineData(4, 20, 4, 26, 0)]
     [InlineData(7, 20, 7, 29, 2)]
     [InlineData(1, 1, 12, 29, 17)]
-    public async Task GetCustomersByBirthAsync_ReturnsCustomersInRange(int startMonth,
+    public async Task GetByBirthAsync_ReturnsCustomersInRange(int startMonth,
         int startDay, int endMonth, int endDay, int expectedCount)
     {
         var customers = new List<Customer>
@@ -80,24 +80,24 @@ public class CustomerServiceTests
         var dateEnd = new DateTime(DateTime.Now.Year, endMonth, endDay);
         var dates = new DateFilter { DateStart = dateStart, DateEnd = dateEnd };
 
-        var result = await _sut.GetCustomersByBirthAsync(dates);
+        var result = await _sut.GetByBirthAsync(dates);
 
         Assert.Equal(expectedCount, result.Count);
     }
 
     [Fact]
-    public async Task GetFullCustomerByIdAsync_NonExistsCustomer_EntityNotFoundExceptionThrown()
+    public async Task GetFullByIdAsync_NonExistsCustomer_EntityNotFoundExceptionThrown()
     {
         var id = Guid.NewGuid();
         var msg = $"Customer {id} not found";
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetFullCustomerByIdAsync(id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetFullByIdAsync(id));
 
         Assert.Equal(msg, ex.Message);
     }
 
     [Fact]
-    public async Task GetFullCustomerByIdAsync_ExistsCustomerNoAccounts_EntityNotFoundExceptionThrown()
+    public async Task GetFullByIdAsync_ExistsCustomerNoAccounts_EntityNotFoundExceptionThrown()
     {
         var customer = CustomerTestCase.GetCustomerEntity();
         var id = customer.Id;
@@ -107,13 +107,13 @@ public class CustomerServiceTests
                      It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>?>()))
                             .ReturnsAsync(customer);
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetFullCustomerByIdAsync(id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetFullByIdAsync(id));
 
         Assert.Equal(msg, ex.Message);
     }
 
     [Fact]
-    public async Task GetFullCustomerByIdAsync_ExistsCustomer_GetSucess()
+    public async Task GetFullByIdAsync_ExistsCustomer_GetSucess()
     {
         var accounts = new List<Account> { AccountTestCase.GetAccountEntity()};
         var customer = CustomerTestCase.GetCustomerEntity(accounts);
@@ -124,61 +124,61 @@ public class CustomerServiceTests
                      It.IsAny<Func<IQueryable<Customer>, IIncludableQueryable<Customer, object>>?>()))
                             .ReturnsAsync(customer);
         
-        var customerResponse = await _sut.GetFullCustomerByIdAsync(id);
+        var customerResponse = await _sut.GetFullByIdAsync(id);
 
         Assert.Equivalent(customerModel, customerResponse);
     }
 
     [Fact]
-    public async Task GetCustomerByIdAsync_NonExistingUser_EntityNotFoundExceptionThrown()
+    public async Task GetByIdAsync_NonExistingCustomer_EntityNotFoundExceptionThrown()
     {
         var id = Guid.NewGuid();
         var msg = $"Customer {id} not found";
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetCustomerByIdAsync(id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetByIdAsync(id));
 
         Assert.Equal(msg, ex.Message);
     }
 
     [Fact]
-    public async Task GetCustomerByIdAsync_ExistingUser_GetSucess()
+    public async Task GetByIdAsync_ExistingCustomer_GetSucess()
     {
         var customer = CustomerTestCase.GetCustomerEntity();
         _customerRepositoryMock.Setup(x => x.GetByIdAsync(customer.Id)).ReturnsAsync(customer);
         var customerModel = _mapper.Map<CustomerModel>(customer);
 
-        var customerResponse = await _sut.GetCustomerByIdAsync(customer.Id);
+        var customerResponse = await _sut.GetByIdAsync(customer.Id);
 
         _customerRepositoryMock.Verify(x => x.GetByIdAsync(customer.Id), Times.Once);
         Assert.Equivalent(customerModel, customerResponse);
     }
 
     [Fact]
-    public async Task GetCustomerByAccountIdAsync_NonExistsAccount_EntityNotFoundExceptionThrown()
+    public async Task GetByAccountIdAsync_NonExistsAccount_EntityNotFoundExceptionThrown()
     {
         var id = Guid.NewGuid();
         var msg = $"Account {id} not found";
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetCustomerByAccountIdAsync(id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetByAccountIdAsync(id));
 
         Assert.Equal(msg, ex.Message);
     }
 
     [Fact]
-    public async Task GetCustomerByAccountIdAsync_ExistsAccountNonExistsCustomer_EntityNotFoundExceptionThrown()
+    public async Task GetByAccountIdAsync_ExistsAccountNonExistsCustomer_EntityNotFoundExceptionThrown()
     {
         var account = AccountTestCase.GetAccountEntity();
         var msg = $"Customer with account {account.Id} not found";
         _accountRepositoryMock.Setup(x => x.GetByIdAsync(account.Id)).ReturnsAsync(account);
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetCustomerByAccountIdAsync(account.Id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetByAccountIdAsync(account.Id));
 
         _accountRepositoryMock.Verify(x=> x.GetByIdAsync(account.Id), Times.Once);
         Assert.Equal(msg, ex.Message);
     }
 
     [Fact]
-    public async Task GetCustomerByAccountIdAsync_ExistsAccountExistsCustomer_GetSucess()
+    public async Task GetByAccountIdAsync_ExistsAccountExistsCustomer_GetSucess()
     {
         var customer = CustomerTestCase.GetCustomerEntity();    
         var account = AccountTestCase.GetAccountEntity(customer.Id, null, customer);
@@ -188,37 +188,37 @@ public class CustomerServiceTests
             .ReturnsAsync(customer);
         var customerModel = _mapper.Map<CustomerModel>(customer);
         
-        var customerResponse = await _sut.GetCustomerByAccountIdAsync(account.Id);
+        var customerResponse = await _sut.GetByAccountIdAsync(account.Id);
 
         _accountRepositoryMock.Verify(x => x.GetByIdAsync(account.Id), Times.Once);
     }
 
     [Fact]
-    public async Task GetCustomerByTransactionIdAsync_NonExistsTransaction_EntityNotFoundExceptionThrown()
+    public async Task GetByTransactionIdAsync_NonExistsTransaction_EntityNotFoundExceptionThrown()
     {
         var id = Guid.NewGuid();
         var msg = $"Transaction {id} not found";
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetCustomerByTransactionIdAsync(id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetByTransactionIdAsync(id));
 
         Assert.Equal(msg, ex.Message);
     }
 
     [Fact]
-    public async Task GetCustomerByTransactionIdAsync_ExistsTransactionNonExistsCustomer_EntityNotFoundExceptionThrown()
+    public async Task GetByTransactionIdAsync_ExistsTransactionNonExistsCustomer_EntityNotFoundExceptionThrown()
     {
         var transaction = TransactionTestCase.GetTransactionEntity();
         var msg = $"Customer with transaction {transaction.Id} not found";
         _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetCustomerByTransactionIdAsync(transaction.Id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetByTransactionIdAsync(transaction.Id));
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
         Assert.Equal(msg , ex.Message);
     }
 
     [Fact]
-    public async Task GetCustomerByTransactionIdAsync_ExistsTransactionExistsCustomer_GetSucess()
+    public async Task GetByTransactionIdAsync_ExistsTransactionExistsCustomer_GetSucess()
     {
         var customer = CustomerTestCase.GetCustomerEntity();
         var transaction = TransactionTestCase.GetTransactionEntity(null, customer.Id);
@@ -229,7 +229,7 @@ public class CustomerServiceTests
         _transactionRepositoryMock.Setup(x => x.GetByIdAsync(transaction.Id)).ReturnsAsync(transaction);
         var customerModel = _mapper.Map<CustomerModel>(customer);
 
-        var customerResponse = await _sut.GetCustomerByTransactionIdAsync(transaction.Id);
+        var customerResponse = await _sut.GetByTransactionIdAsync(transaction.Id);
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
         _customerRepositoryMock.Verify(x => x.FindAsync(x => x.Transactions.Contains(transaction),
@@ -238,14 +238,14 @@ public class CustomerServiceTests
     }
 
     [Fact]
-    public async Task AddCustomerAsync_AddSucess()
+    public async Task AddAsync_AddSucess()
     {
         var customer = CustomerTestCase.GetCustomerEntity();
         _customerRepositoryMock.Setup(x =>
             x.AddAndReturnAsync(It.Is<Customer>(x => x.Id == customer.Id))).ReturnsAsync(customer);
         var customerModel = _mapper.Map<CustomerModel>(customer);
 
-        var customerResponse = await _sut.AddCustomerAsync(customerModel);
+        var customerResponse = await _sut.AddAsync(customerModel);
 
         _customerRepositoryMock.Verify(x => x.AddAndReturnAsync(It.Is<Customer>(x => x.Id == customer.Id)), Times.Once);
         Assert.Equivalent(customerModel, customerResponse);

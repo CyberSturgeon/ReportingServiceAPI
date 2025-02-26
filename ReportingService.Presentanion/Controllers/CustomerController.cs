@@ -12,26 +12,19 @@ public class CustomerController(
     IMapper mapper) : Controller
 {
     [HttpGet("{id}")]
-    public async Task<ActionResult<CustomerResponse>> GetCustomerByIdAsync([FromRoute] Guid id)
+    public async Task<ActionResult<CustomerResponse>> GetByIdAsync([FromRoute] Guid id)
     {
         var customer = mapper.Map<CustomerResponse>(
-                       await customerService.GetCustomerByIdAsync(id));
+                       await customerService.GetByIdAsync(id));
 
         return Ok(customer);
     }
 
     [HttpGet("birth-date")]
-    public async Task<ActionResult<List<CustomerResponse>>> GetCustomersByBirthAsync([FromQuery] DateFilter dates)
+    public async Task<ActionResult<List<CustomerResponse>>> GetByBirthAsync([FromQuery] DateFilter dates)
     {
         var customers = mapper.Map<List<CustomerResponse>>(
-                       await customerService.GetCustomersByBirthAsync(dates));
+                       await customerService.GetByBirthAsync(dates));
         return Ok(customers);
-    }
-
-    [HttpGet("{id}/transactions")]
-    public async Task<ActionResult<CustomerResponse>> GetTransactionsByCustomerIdAsync(
-            [FromRoute] Guid Id, [FromQuery] int? monthCount)
-    {
-        return Ok(new CustomerResponse());
     }
 }
