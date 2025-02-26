@@ -63,11 +63,11 @@ public class CustomerRepository(ReportingContext context)
             {
                 NpgsqlDbType = NpgsqlDbType.Boolean
             },
-            new NpgsqlParameter("@p_email)", customer.Email)
+            new NpgsqlParameter("p_email", customer.Email)
             {
                 NpgsqlDbType = NpgsqlDbType.Varchar
             },
-            new NpgsqlParameter("p_custom_vip_due_date", customer.CustomVipDueDate)
+            new NpgsqlParameter("p_custom_vip_due_date", DateTime.Now)
             {
                 NpgsqlDbType = NpgsqlDbType.Timestamp
             },

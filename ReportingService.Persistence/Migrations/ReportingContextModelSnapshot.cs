@@ -93,7 +93,6 @@ namespace ReportingService.Persistence.Migrations
                         .HasColumnType("character varying(30)");
 
                     b.Property<bool>("IsDeactivated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
