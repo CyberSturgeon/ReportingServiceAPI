@@ -25,21 +25,10 @@ namespace ReportingService.Application.Consumers
             var customerModel = mapper.Map<CustomerModel>(customer);
             var accountModel = mapper.Map<AccountModel>(account);
 
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                try
-                {
-                    //await accountService.AddAsync(accountModel);
-                    //await customerService.AddCustomerAsync(customerModel);
-
-                    scope.Complete();
-                    logger.LogInformation($"ADD Customer {context.Message.Customer.Id} WithAccount {context.Message.Account.Id} SUCCESS");
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            }
+            await customerService.AddCustomerAsync(customerModel);
+            await accountService.AddAsync(accountModel);
+            logger.LogInformation($"ADD Customer {context.Message.Customer.Id} WithAccount {context.Message.Account.Id} SUCCESS");
+            
         }
     }
 }

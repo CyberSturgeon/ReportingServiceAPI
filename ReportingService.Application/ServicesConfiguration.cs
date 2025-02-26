@@ -26,8 +26,8 @@ public static class ServicesConfiguration
              options.Host = section.GetValue<string>("Host") ?? string.Empty;
              options.Username = section.GetValue<string>("Username") ?? string.Empty;
              options.Password = section.GetValue<string>("Password") ?? string.Empty;
-             options.CustomerQueue = section.GetSection("Consumers").GetValue<string>("RoleUpdateQueue") ?? string.Empty;
-             options.RoleUpdateQueue = section.GetSection("Consumers").GetValue<string>("CustomerQueue") ?? string.Empty;
+             options.CustomerQueue = section.GetSection("Consumers").GetValue<string>("CustomerQueue") ?? string.Empty;
+             options.RoleUpdateQueue = section.GetSection("Consumers").GetValue<string>("RoleUpdateQueue") ?? string.Empty;
          });
         //services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
 

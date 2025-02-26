@@ -28,7 +28,7 @@ public class AccountService(
 
     public async Task TransactionalAddAsync(List<AccountModel> accountModels)
     {
-        logger.LogInformation($"CREATE {accountModels.Count} customers ");
+        logger.LogInformation($"CREATE {accountModels.Count} account");
 
         var accounts = mapper.Map<List<Account>>(accountModels);
         accountRepository.TransactionalAddRangeAsync(accounts);
@@ -37,7 +37,7 @@ public class AccountService(
 
     public async Task AddAsync(AccountModel accountModel)
     {
-        logger.LogInformation($"CREATE {accountModel.Id} customer");
+        logger.LogInformation($"CREATE {accountModel.Id} account");
 
         var account = mapper.Map<Account>(accountModel);
         accountRepository.AddAsync(account);

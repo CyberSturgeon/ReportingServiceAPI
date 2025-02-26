@@ -28,4 +28,54 @@ public class CustomerRepository(ReportingContext context)
         });
     }
 
+    public async Task AddCustomerRawSqlAsync(Customer customer)
+    {
+        await context.Database.ExecuteSqlRawAsync("SELECT InsertCustomer(@p_role,@p_phone,@p_address,@p_password,@p_birth_date,@p_first_name,@p_last_name,@p_is_deactivated,@p_email,@p_custom_vip_due_date,@p_customer_service_id)",
+             new NpgsqlParameter("p_role", (int)customer.Role)
+             {
+                 NpgsqlDbType =NpgsqlDbType.Integer
+             },
+            new NpgsqlParameter("p_phone", customer.Phone)
+            {
+                NpgsqlDbType = NpgsqlDbType.Varchar
+            },
+            new NpgsqlParameter("p_address", customer.Address)
+            {
+                NpgsqlDbType = NpgsqlDbType.Varchar
+            },
+            new NpgsqlParameter("p_password", customer.Password)
+            {
+                NpgsqlDbType = NpgsqlDbType.Varchar
+            },
+            new NpgsqlParameter("p_birth_date", customer.BirthDate)
+            {
+                NpgsqlDbType = NpgsqlDbType.TimestampTz
+            },
+            new NpgsqlParameter("p_first_name", customer.FirstName)
+            {
+                NpgsqlDbType = NpgsqlDbType.Varchar
+            },
+            new NpgsqlParameter("p_last_name", customer.LastName)
+            {
+                NpgsqlDbType = NpgsqlDbType.Varchar
+            },
+            new NpgsqlParameter("p_is_deactivated", customer.IsDeactivated)
+            {
+                NpgsqlDbType = NpgsqlDbType.Boolean
+            },
+            new NpgsqlParameter("@p_email)", customer.Email)
+            {
+                NpgsqlDbType = NpgsqlDbType.Varchar
+            },
+            new NpgsqlParameter("p_custom_vip_due_date", customer.CustomVipDueDate)
+            {
+                NpgsqlDbType = NpgsqlDbType.Timestamp
+            },
+            new NpgsqlParameter("p_customer_service_id", customer.CustomerServiceId)
+            {
+                NpgsqlDbType = NpgsqlDbType.Uuid
+            }
+            );
+
+    }
 }
