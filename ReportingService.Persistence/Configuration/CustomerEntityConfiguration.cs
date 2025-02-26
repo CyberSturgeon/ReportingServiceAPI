@@ -48,7 +48,6 @@ internal static class CustomerEntityConfiguration
        .HasColumnType("timestamp without time zone");
 
         builder.Entity<Customer>().Property(p => p.IsDeactivated)
-        .IsRequired()
         .HasDefaultValue(false);
 
         builder.Entity<Customer>().Property<DateTime>(x => x.BirthDate);

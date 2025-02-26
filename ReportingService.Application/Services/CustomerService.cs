@@ -17,12 +17,12 @@ public class CustomerService(
         IAccountRepository accountRepository,
         IMapper mapper, ILogger<CustomerService> logger) : ICustomerService
 {
-    public async Task<CustomerModel> AddAsync(CustomerModel customerModel)
+    public async Task AddAsync(CustomerModel customerModel)
     {
         logger.LogInformation($"CREATE customer {LogHelper.HideEmail(customerModel.Email)}");
-        var customer = await customerRepository.AddAndReturnAsync(mapper.Map<Customer>(customerModel));
+        var c = mapper.Map<Customer>(customerModel);
+        await customerRepository.AddCustomerRawSqlAsync(c);
         logger.LogInformation("SUCCESS");
-        return mapper.Map<CustomerModel>(customer);
     }
 
     public async Task<CustomerModel> GetByIdAsync(Guid id)
