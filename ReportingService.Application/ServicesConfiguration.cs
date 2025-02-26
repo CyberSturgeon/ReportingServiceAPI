@@ -34,6 +34,10 @@ public static class ServicesConfiguration
         //            h.Username(settings.Username);
         //            h.Password(settings.Password);
         //        });
+                //cfg.UseTransaction(t =>
+                //{
+                //    t.Timeout = TimeSpan.FromSeconds(120);
+                //});
 
         //        cfg.ReceiveEndpoint(settings.CustomerQueue, e =>
         //        {
