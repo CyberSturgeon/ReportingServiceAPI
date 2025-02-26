@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MYPBackendMicroserviceIntegrations.Messages;
 using ReportingService.Application.Models;
 using ReportingService.Persistence.Entities;
@@ -10,6 +10,7 @@ public class CustomerMapperProfile : Profile
     public CustomerMapperProfile()
     {
         CreateMap<Customer, CustomerModel>().ReverseMap();
-        //CreateMap<CustomerMessage, CustomerModel>().;
+        CreateMap<CustomerMessage, CustomerModel>()
+            .ForMember(dest => dest.CustomerServiceId, opt => opt.MapFrom(src => src.Id));
     }
 }

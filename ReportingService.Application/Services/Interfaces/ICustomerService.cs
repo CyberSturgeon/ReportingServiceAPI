@@ -10,7 +10,6 @@ namespace ReportingService.Application.Services.Interfaces
         Task<CustomerModel> GetCustomerByAccountIdAsync(Guid accountId);
         Task<CustomerModel> GetCustomerByIdAsync(Guid id);
         Task<CustomerModel> GetCustomerByTransactionIdAsync(Guid transactionId);
-        Task<List<CustomerModel>> GetCustomersAsync(CustomerFilter customerFilter);
         Task<List<CustomerModel>> GetCustomersByBirthAsync(DateFilter dates);
         Task<CustomerModel> GetFullCustomerByIdAsync(Guid id);
         Task TransactionalAddCustomersAsync(List<CustomerModel> customerModels);

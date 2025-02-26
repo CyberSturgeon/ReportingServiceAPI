@@ -1,5 +1,4 @@
-﻿
-using ReportingService.Core.Configuration;
+﻿using MYPBackendMicroserviceIntegrations.Enums;
 
 namespace ReportingService.Application.Models;
 
@@ -15,8 +14,8 @@ public class CustomerModel
     public DateTime BirthDate { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public ICollection<AccountModel> Accounts { get; set; } = [];
     public bool IsDeactivated { get; set; }
-    // DENORMALIZED
-    public ICollection<TransactionModel> Transactions { get; set; } = [];
+    public Guid CustomerServiceId { get; set; }
+    public List<AccountModel> Accounts { get; set; }
+    public List<TransactionModel> Transactions { get; set; }
 }

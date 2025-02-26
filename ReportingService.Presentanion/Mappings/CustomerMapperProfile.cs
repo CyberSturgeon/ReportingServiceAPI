@@ -8,6 +8,7 @@ public class CustomerMapperProfile : Profile
 {
     public CustomerMapperProfile()
     {
-        CreateMap<CustomerResponse, CustomerModel>().ReverseMap();
+        CreateMap<CustomerModel, CustomerResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CustomerServiceId));
     }
 }
