@@ -43,4 +43,13 @@ public class AccountService(
         accountRepository.AddAccountRawSqlAsync(account);
         logger.LogInformation("SUCCESS");
     }
+
+    public async Task UpdateAsync(AccountModel accountModel)
+    {
+        logger.LogInformation($"UPDATE {accountModel.Id} account");
+
+        var account = mapper.Map<Account>(accountModel);
+        accountRepository.UpdateAccountRawSqlAsync(account);
+        logger.LogInformation("SUCCESS");
+    }
 }

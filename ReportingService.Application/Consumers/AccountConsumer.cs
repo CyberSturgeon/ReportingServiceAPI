@@ -19,7 +19,7 @@ namespace ReportingService.Application.Consumers
             var account = context.Message;
             var accountModel = mapper.Map<AccountModel>(account);
 
-            //await accountService.AddAsync(accountModel);
+            await accountService.UpdateAsync(accountModel);
             logger.LogInformation($"UPDATE {context.Message.Id} account SUCCESS");
         }
     }

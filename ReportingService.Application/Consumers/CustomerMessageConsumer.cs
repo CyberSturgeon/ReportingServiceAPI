@@ -17,7 +17,7 @@ public class CustomerMessageConsumer(ICustomerService customerService,
         logger.LogInformation($"CONSUME {context.Message.Id} customer");
         var customer = context.Message;
         var customerModel = mapper.Map<CustomerModel>(customer);
-        await customerService.AddAsync(customerModel);
+        await customerService.UpdateAsync(customerModel);
         logger.LogInformation($"ADD {context.Message.Id} customer SUCCESS");
     }
 }

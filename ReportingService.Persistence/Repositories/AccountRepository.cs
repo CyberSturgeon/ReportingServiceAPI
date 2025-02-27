@@ -35,4 +35,30 @@ public class AccountRepository(ReportingContext context)
         );
 
     }
+
+    public async Task UpdateAccountRawSqlAsync(Account account)
+    {
+        await context.Database.ExecuteSqlRawAsync("SELECT UpdateAccount(@p_id,@p_customer_id,@p_date_created,@p_currency,@p_is_deactivated)",
+            new NpgsqlParameter("p_id", account.Id)
+            {
+                NpgsqlDbType = NpgsqlDbType.Uuid
+            },
+            new NpgsqlParameter("p_customer_id", account.CustomerId)
+            {
+                NpgsqlDbType = NpgsqlDbType.Uuid
+            },
+            new NpgsqlParameter("p_date_created", account.DateCreated)
+            {
+                NpgsqlDbType = NpgsqlDbType.Timestamp
+            },
+            new NpgsqlParameter("p_currency", (int)account.Currency)
+            {
+                NpgsqlDbType = NpgsqlDbType.Integer
+            },
+            new NpgsqlParameter("p_is_deactivated", account.IsDeactivated)
+            {
+                NpgsqlDbType = NpgsqlDbType.Boolean
+            }
+        );
+    }
 }

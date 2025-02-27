@@ -14,5 +14,6 @@ namespace ReportingService.Application.Services.Interfaces
         Task<List<CustomerModel>> GetByBirthAsync(DateFilter dates);
         Task<CustomerModel> GetFullByIdAsync(Guid id);
         Task TransactionalAddAsync(List<CustomerModel> customerModels);
+        Task UpdateAsync(CustomerModel customerModel);
     }
 }

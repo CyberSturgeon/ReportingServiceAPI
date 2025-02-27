@@ -20,8 +20,7 @@ public class CustomerService(
     public async Task AddAsync(CustomerModel customerModel)
     {
         logger.LogInformation($"CREATE customer {LogHelper.HideEmail(customerModel.Email)}");
-        var c = mapper.Map<Customer>(customerModel);
-        await customerRepository.AddCustomerRawSqlAsync(c);
+        await customerRepository.AddCustomerRawSqlAsync(mapper.Map<Customer>(customerModel));
         logger.LogInformation("SUCCESS");
     }
 
@@ -34,6 +33,13 @@ public class CustomerService(
         var customerModel = mapper.Map<CustomerModel>(customer);
         logger.LogInformation("SUCCESS");
         return customerModel;
+    }
+
+    public async Task UpdateAsync(CustomerModel customerModel)
+    {
+        logger.LogInformation($"UPDATE customer {LogHelper.HideEmail(customerModel.Email)}");
+        await customerRepository.UpdateCustomerRawSqlAsync(mapper.Map<Customer>(customerModel));
+        logger.LogInformation("SUCCESS");
     }
 
     public async Task<CustomerModel> GetFullByIdAsync(Guid id)
