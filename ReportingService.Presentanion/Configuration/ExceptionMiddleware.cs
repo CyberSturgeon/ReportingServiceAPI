@@ -22,6 +22,10 @@ public class ExceptionMiddleware
         {
             await HandleEntityNotFoundExceptionAsync(httpContext, ex);
         }
+        catch (BadRabbitDataException ex)
+        {
+            await HandleBadRabbitDataExceptionAsync(httpContext, ex);
+        }
         catch (Exception ex)
         {
             await HandleExceptionAsync(httpContext, ex);
@@ -35,6 +39,13 @@ public class ExceptionMiddleware
             StatusCode = httpContext.Response.StatusCode,
             Message = message,
         }.ToString());
+    }
+
+    private async Task HandleBadRabbitDataExceptionAsync(HttpContext httpContext, BadRabbitDataException ex)
+    {
+        httpContext.Response.ContentType = "application/json";
+        httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
+        await WriteErrorDetailsAsync(httpContext, ex.Message);
     }
 
     private async Task HandleEntityNotFoundExceptionAsync(HttpContext httpContext, Exception ex)
