@@ -27,7 +27,7 @@ public class CustomerService(
         }
         catch (Exception ex)
         {
-            throw new BadRabbitDataException($"ERROR {customerModel.Id} problem");
+            throw new BadRabbitDataException($"ERROR {customerModel.CustomerServiceId} problem");
         }
     }
 
