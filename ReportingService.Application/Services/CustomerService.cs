@@ -19,9 +19,16 @@ public class CustomerService(
 {
     public async Task AddAsync(CustomerModel customerModel)
     {
-        logger.LogInformation($"CREATE customer {LogHelper.HideEmail(customerModel.Email)}");
-        await customerRepository.AddCustomerRawSqlAsync(mapper.Map<Customer>(customerModel));
-        logger.LogInformation("SUCCESS");
+        try
+        {
+            logger.LogInformation($"CREATE customer {LogHelper.HideEmail(customerModel.Email)}");
+            await customerRepository.AddCustomerRawSqlAsync(mapper.Map<Customer>(customerModel));
+            logger.LogInformation("SUCCESS");
+        }
+        catch (Exception ex)
+        {
+            throw new BadRabbitDataException($"ERROR {customerModel.Id} problem");
+        }
     }
 
     public async Task<CustomerModel> GetByIdAsync(Guid id)
@@ -37,9 +44,16 @@ public class CustomerService(
 
     public async Task UpdateAsync(CustomerModel customerModel)
     {
-        logger.LogInformation($"UPDATE customer {LogHelper.HideEmail(customerModel.Email)}");
-        await customerRepository.UpdateCustomerRawSqlAsync(mapper.Map<Customer>(customerModel));
-        logger.LogInformation("SUCCESS");
+        try
+        {
+            logger.LogInformation($"UPDATE customer {LogHelper.HideEmail(customerModel.Email)}");
+            await customerRepository.UpdateCustomerRawSqlAsync(mapper.Map<Customer>(customerModel));
+            logger.LogInformation("SUCCESS");
+        }
+        catch (Exception ex)
+        {
+            throw new BadRabbitDataException($"ERROR {customerModel.Id} problem");
+        }
     }
 
     public async Task<CustomerModel> GetFullByIdAsync(Guid id)
@@ -113,9 +127,16 @@ public class CustomerService(
 
     public async Task BatchUpdateRoleAync(List<Guid> customerIds)
     {
-        logger.LogInformation($"UPDATE role for {customerIds.Count} customers ");
-        await customerRepository.BatchUpdateRoleAsync(customerIds);
-        logger.LogInformation("SUCCESS");
+        try
+        {
+            logger.LogInformation($"UPDATE role for {customerIds.Count} customers ");
+            await customerRepository.BatchUpdateRoleAsync(customerIds);
+            logger.LogInformation("SUCCESS");
+        }
+        catch (Exception ex)
+        {
+            throw new BadRabbitDataException($"ERROR problem");
+        }
     }
 
     private async Task CheckAccounts(List<CustomerModel> customerModels)
