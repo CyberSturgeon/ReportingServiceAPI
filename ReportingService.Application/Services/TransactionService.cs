@@ -66,7 +66,7 @@ namespace ReportingService.Application.Services
             }
             catch (Exception ex)
             {
-                throw new BadRabbitDataException($"ERROR {transactionModel.Id} nasipali govna");
+                throw new BadRabbitDataException($"ERROR {transactionModel.Id} problem");
             }
         }
     }

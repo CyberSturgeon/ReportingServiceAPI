@@ -37,19 +37,34 @@ public class AccountService(
 
     public async Task AddAsync(AccountModel accountModel)
     {
+        try
+        { 
         logger.LogInformation($"CREATE {accountModel.Id} account");
 
         var account = mapper.Map<Account>(accountModel);
         accountRepository.AddAccountRawSqlAsync(account);
         logger.LogInformation("SUCCESS");
+        }
+        catch (Exception ex)
+        {
+            throw new BadRabbitDataException($"ERROR {accountModel.Id} problem");
+        }
     }
 
     public async Task UpdateAsync(AccountModel accountModel)
     {
-        logger.LogInformation($"UPDATE {accountModel.Id} account");
+        try
+        {
+            logger.LogInformation($"UPDATE {accountModel.Id} account");
 
-        var account = mapper.Map<Account>(accountModel);
-        accountRepository.UpdateAccountRawSqlAsync(account);
-        logger.LogInformation("SUCCESS");
+            var account = mapper.Map<Account>(accountModel);
+            accountRepository.UpdateAccountRawSqlAsync(account);
+            logger.LogInformation("SUCCESS");
+        }
+        catch (Exception ex)
+
+        {
+            throw new BadRabbitDataException($"ERROR {accountModel.Id} problem");
+        }
     }
 }
