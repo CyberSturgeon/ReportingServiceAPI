@@ -9,5 +9,6 @@ namespace ReportingService.Application.Services.Interfaces
         Task<List<TransactionModel>> SearchTransactionByAccountAsync(Guid accountId);
         Task<List<TransactionModel>> GetTransactionsByPeriodAsync(DateTimeFilter dates);
         Task TransactionalAddAsync(List<TransactionModel> transactionModels);
+        Task AddAsync(TransactionModel transactionModel);
     }
 }

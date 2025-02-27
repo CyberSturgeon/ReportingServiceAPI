@@ -55,5 +55,11 @@ namespace ReportingService.Application.Services
             var transactions = mapper.Map<List<Transaction>>(transactionModels);
             await transactionRepository.TransactionalAddRangeAsync(transactions);
         }
+
+        public async Task AddAsync(TransactionModel transactionModel)
+        {
+            var transaction = mapper.Map<Transaction>(transactionModel);
+            await transactionRepository.AddTransactionRawSqlAsync(transaction);
+        }
     }
 }
