@@ -4,6 +4,7 @@ using ReportingService.Application.Services.Interfaces;
 using ReportingService.Core.Configuration.Filters;
 using ReportingService.Persistence.Entities;
 using ReportingService.Persistence.Repositories.Interfaces;
+using ReportingService.Application.Exceptions;
 
 namespace ReportingService.Application.Services
 {
@@ -58,8 +59,15 @@ namespace ReportingService.Application.Services
 
         public async Task AddAsync(TransactionModel transactionModel)
         {
-            var transaction = mapper.Map<Transaction>(transactionModel);
-            await transactionRepository.AddTransactionRawSqlAsync(transaction);
+            try
+            {
+                var transaction = mapper.Map<Transaction>(transactionModel);
+                await transactionRepository.AddTransactionRawSqlAsync(transaction);
+            }
+            catch (Exception ex)
+            {
+                throw new BadRabbitDataException($"ERROR {transactionModel.Id} nasipali govna");
+            }
         }
     }
 }

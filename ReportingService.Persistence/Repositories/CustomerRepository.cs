@@ -79,7 +79,7 @@ public class CustomerRepository(ReportingContext context)
 
     public async Task UpdateCustomerRawSqlAsync( Customer customer )
     {
-        await context.Database.ExecuteSqlRawAsync("SELECT InsertCustomer(@p_customer_service_id,@p_role,@p_phone,@p_address,@p_password,@p_birth_date,@p_first_name,@p_last_name,@p_is_deactivated,@p_email,@p_custom_vip_due_date)",
+        await context.Database.ExecuteSqlRawAsync("SELECT UpdateCustomer(@p_customer_service_id,@p_role,@p_phone,@p_address,@p_password,@p_birth_date,@p_first_name,@p_last_name,@p_is_deactivated,@p_email,@p_custom_vip_due_date)",
              new NpgsqlParameter("p_role", (int)customer.Role)
              {
                  NpgsqlDbType = NpgsqlDbType.Integer
