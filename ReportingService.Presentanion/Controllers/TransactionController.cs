@@ -19,7 +19,7 @@ public class TransactionController(
         [FromQuery] Guid customerId, 
         [FromBody] TransactionSearchFilter request)
     {
-        var transactions = await transactionService.SearchTransactionAsync(customerId, request);
+        var transactions = await transactionService.SearchAsync(customerId, request);
 
         var response = mapper.Map<List<TransactionResponse>>(transactions);
             
@@ -30,7 +30,7 @@ public class TransactionController(
     public async Task<List<TransactionResponse>> SearchTransactionsByAccountAsync(
         [FromQuery] Guid accountId)
     {
-        var transactions = await transactionService.SearchTransactionByAccountAsync(accountId);
+        var transactions = await transactionService.SearchByAccountAsync(accountId);
 
         var response = mapper.Map<List<TransactionResponse>>(transactions);
 
@@ -41,7 +41,7 @@ public class TransactionController(
     public async Task<List<TransactionResponse>> GetTransactionsByPeriodAsync(
         [FromQuery] DateTimeFilter dates)
     {
-        var transactions = await transactionService.GetTransactionsByPeriodAsync(dates);
+        var transactions = await transactionService.GetByPeriodAsync(dates);
         var response = mapper.Map<List<TransactionResponse>>(transactions);
 
         return response;

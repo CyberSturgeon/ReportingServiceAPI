@@ -14,10 +14,10 @@ public class ComissionController(
     public async Task<ActionResult<ComissionResponse>> GetComissionByIdAsync([FromQuery] Guid? customerId = null,
                                                        [FromQuery] Guid? accountId = null, [FromQuery] DateTimeFilter? date = null)
     {
-        var customer = mapper.Map<ComissionResponse>(
-                       await comissionService.GetComissionsAsync(customerId, accountId, date));
+        var comission = mapper.Map<ComissionResponse>(
+                       await comissionService.GetAsync(customerId, accountId, date));
 
-        return Ok(customer);
+        return Ok(comission);
     }
 
 }

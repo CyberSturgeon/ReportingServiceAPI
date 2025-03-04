@@ -30,7 +30,7 @@ namespace ReportingService.Application.Tests
             var msg = $"Customer {id} not found";
             var dates = new TransactionSearchFilter { DateFrom = DateTime.Now, DateTo = DateTime.Now };
 
-            var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.SearchTransactionAsync(id, dates));
+            var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.SearchAsync(id, dates));
 
             Assert.Equal(msg, ex.Message);
         }

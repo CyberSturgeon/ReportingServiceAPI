@@ -12,7 +12,7 @@ namespace ReportingService.Application.Services
         ITransactionRepository transactionRepository,
         IMapper mapper) : ITransactionService
     {
-        public async Task<List<TransactionModel>> SearchTransactionAsync(
+        public async Task<List<TransactionModel>> SearchAsync(
             Guid customerId,
             TransactionSearchFilter dates)
         {
@@ -28,7 +28,7 @@ namespace ReportingService.Application.Services
             return transactionModels;
         }
 
-        public async Task<List<TransactionModel>> SearchTransactionByAccountAsync(Guid accountId)
+        public async Task<List<TransactionModel>> SearchByAccountAsync(Guid accountId)
         {
             var transactions = await transactionRepository.FindManyAsync(
                 x => x.AccountId == accountId);
@@ -40,7 +40,7 @@ namespace ReportingService.Application.Services
             return transactionModels;
         }
 
-        public async Task<List<TransactionModel>> GetTransactionsByPeriodAsync(DateTimeFilter dates)
+        public async Task<List<TransactionModel>> GetByPeriodAsync(DateTimeFilter dates)
         {
             dates.DateStart = DateTime.SpecifyKind(dates.DateStart, DateTimeKind.Utc);
             dates.DateEnd = DateTime.SpecifyKind(dates.DateEnd, DateTimeKind.Utc);

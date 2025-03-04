@@ -5,10 +5,10 @@ namespace ReportingService.Application.Services.Interfaces
 {
     public interface IComissionService
     {
-        Task<ComissionModel> AddComissionAsync(ComissionModel comissionModel);
-        Task<ComissionModel> GetComissionByIdAsync(Guid id);
+        Task<ComissionModel> AddAsync(ComissionModel comissionModel);
+        Task<ComissionModel> GetByIdAsync(Guid id);
         Task<ComissionModel> GetComissionByTransactionIdAsync(Guid transactionId);
-        Task<IEnumerable<ComissionModel>> GetComissionsAsync(Guid? customerId, Guid? accountId, DateTimeFilter date);
-        Task TransactionalAddComissionsAsync(List<ComissionModel> comissionModels);
+        Task<IEnumerable<ComissionModel>> GetAsync(Guid? customerId, Guid? accountId, DateTimeFilter date);
+        Task TransactionalAddAsync(List<ComissionModel> comissionModels);
     }
 }

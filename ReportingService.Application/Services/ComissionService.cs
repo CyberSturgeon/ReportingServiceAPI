@@ -14,7 +14,7 @@ public class ComissionService(
         IComissionRepository comissionRepository,
         IMapper mapper, ILogger<ComissionService> logger) : IComissionService
 {
-    public async Task<ComissionModel> GetComissionByIdAsync(Guid id)
+    public async Task<ComissionModel> GetByIdAsync(Guid id)
     {
         logger.LogInformation($"GET comission {id}");
         var comission = await comissionRepository.GetByIdAsync(id) ??
@@ -24,7 +24,7 @@ public class ComissionService(
         return comissionModel;
     }
 
-    public async Task<ComissionModel> AddComissionAsync(ComissionModel comissionModel)
+    public async Task<ComissionModel> AddAsync(ComissionModel comissionModel)
     {
         logger.LogInformation($"CREATE comission for transaction {comissionModel.TransactionId}");
         var transaction = await transactionRepository.GetByIdAsync(comissionModel.TransactionId) ??
@@ -35,7 +35,7 @@ public class ComissionService(
         return mapper.Map<ComissionModel>(comission);
     }
 
-    public async Task TransactionalAddComissionsAsync(List<ComissionModel> comissionModels)
+    public async Task TransactionalAddAsync(List<ComissionModel> comissionModels)
     {
         logger.LogInformation($"CREATE {comissionModels.Count} comissions");
         var transactionIds = comissionModels.Select(cm => cm.TransactionId).Distinct().ToList();
@@ -71,7 +71,7 @@ public class ComissionService(
         return comissionModel;
     }
 
-    public async Task<IEnumerable<ComissionModel>> GetComissionsAsync(Guid? customerId, Guid? accountId,
+    public async Task<IEnumerable<ComissionModel>> GetAsync(Guid? customerId, Guid? accountId,
                     DateTimeFilter date)
     {
         logger.LogInformation($"GET comissions by filter: customer {customerId}, account {accountId}, dates {date.DateStart} - {date.DateEnd}");

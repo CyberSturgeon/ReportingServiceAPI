@@ -36,7 +36,7 @@ public class ComissionServiceTests
         var id = Guid.NewGuid();
         var msg = $"Comission {id} not found";
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetComissionByIdAsync(id));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.GetByIdAsync(id));
 
         Assert.Equal(msg, ex.Message);
     }
@@ -49,7 +49,7 @@ public class ComissionServiceTests
         _comissionRepositoryMock.Setup(x => x.GetByIdAsync(comission.Id)).ReturnsAsync(comission);
         var comissionModel = _mapper.Map<ComissionModel>(comission);
 
-        var comissionResponse = await _sut.GetComissionByIdAsync(comission.Id);
+        var comissionResponse = await _sut.GetByIdAsync(comission.Id);
 
         _comissionRepositoryMock.Verify(x => x.GetByIdAsync(comission.Id), Times.Once);
         Assert.Equivalent(comissionModel, comissionResponse);
@@ -105,7 +105,7 @@ public class ComissionServiceTests
         var comissionModel = ComissionTestCase.GetComissionModel(id, null);
         var msg = $"Transaction {id} related to comission not found";
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.AddComissionAsync(comissionModel));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.AddAsync(comissionModel));
 
         Assert.Equal(msg, ex.Message);
     }
@@ -120,7 +120,7 @@ public class ComissionServiceTests
             x.AddAndReturnAsync(It.Is<Comission>(x =>
                 x.Id == comissionModel.Id && x.TransactionId == transaction.Id))).ReturnsAsync(_mapper.Map<Comission>(comissionModel));
 
-        var comissionResponse = await _sut.AddComissionAsync(comissionModel);
+        var comissionResponse = await _sut.AddAsync(comissionModel);
 
         _transactionRepositoryMock.Verify(x => x.GetByIdAsync(transaction.Id), Times.Once);
         _comissionRepositoryMock.Verify(x =>
@@ -138,7 +138,7 @@ public class ComissionServiceTests
 
         var msg = "No one transaction related to comissions";
 
-        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TransactionalAddComissionsAsync(comissionModels));
+        var ex = await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TransactionalAddAsync(comissionModels));
 
         Assert.Equal(msg, ex.Message);
     }
@@ -158,7 +158,7 @@ public class ComissionServiceTests
         _transactionRepositoryMock.Setup(x => x.FindManyAsync(It.IsAny<Expression<Func<Transaction, bool>>>()))
             .ReturnsAsync(transactions);
 
-        await _sut.TransactionalAddComissionsAsync(comissionModels);
+        await _sut.TransactionalAddAsync(comissionModels);
 
         _comissionRepositoryMock.Verify(x =>
             x.TransactionalAddRangeAsync(It.Is<List<Comission>>(x => x.Count == 2 &&
